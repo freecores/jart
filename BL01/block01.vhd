@@ -1,5 +1,6 @@
 -- Author : Julian Andres Guarin Reyes.
 -- Project : JART, Just Another Ray Tracer.
+-- email : jguarin2002 at gmail.com, j.guarin at javeriana.edu.co
 
 -- This code was entirely written by Julian Andres Guarin Reyes.
 -- The following code is licensed under GNU Public License
@@ -21,7 +22,7 @@
     -- along with JART (Just Another Ray Tracer).  If not, see <http://www.gnu.org/licenses/>.
 	
 	
--- The following HDL is compares 2 32 bit numbers instantiating a comparator.   
+-- The following HDL compares 2 32 bit numbers instantiating a comparator.   
 -- vd is one operand and k the other.
 -- i is the result 1 if vd is grater or equal than k.
 

@@ -1,5 +1,6 @@
 -- Author : Julian Andres Guarin Reyes.
 -- Project : JART, Just Another Ray Tracer.
+-- email : jguarin2002 at gmail.com, j.guarin at javeriana.edu.co
 
 -- This code was entirely written by Julian Andres Guarin Reyes.
 -- The following code is licensed under GNU Public License
