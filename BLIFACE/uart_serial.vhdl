@@ -1,4 +1,27 @@
--- Autor
+-- Author : Julian Andres Guarin Reyes.
+-- Project : JART, Just Another Ray Tracer.
+-- email : jguarin2002 at gmail.com, j.guarin at javeriana.edu.co
+
+-- This code was entirely written by Julian Andres Guarin Reyes.
+-- The following code is licensed under GNU Public License
+-- http://www.gnu.org/licenses/gpl-3.0.txt.
+
+ -- This file is part of JART (Just Another Ray Tracer).
+
+    -- JART (Just Another Ray Tracer) is free software: you can redistribute it and/or modify
+    -- it under the terms of the GNU General Public License as published by
+    -- the Free Software Foundation, either version 3 of the License, or
+    -- (at your option) any later version.
+
+    -- JART (Just Another Ray Tracer) is distributed in the hope that it will be useful,
+    -- but WITHOUT ANY WARRANTY; without even the implied warranty of
+    -- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    -- GNU General Public License for more details.
+
+    -- You should have received a copy of the GNU General Public License
+    -- along with JART (Just Another Ray Tracer).  If not, see <http://www.gnu.org/licenses/>.
+
+	
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
@@ -31,9 +54,8 @@ architecture rtl of uart is
 	-------------------------------------------------------------------------------
 	-- Ticks 
 	-------------------------------------------------------------------------------
-	--constant T50MHZ_54NS	: integer := 27;    --  27 T50MHZ_540NS, 1 16 avo de bit
-	constant TBIT			: integer := 434/4;	--   15 1 bit
-	constant THALF_BIT		: integer := 217/4;	--  7 1/2 bit
+	constant TBIT			: integer := 434/4;	--   15 1 bit Divide By four in order to obtain 460800 bps at 50 MHZ, by 2 for 230400, by 1 for 115200 bps
+	constant THALF_BIT		: integer := 217/4;	--  7 1/2 bit Divide By four in order to obtain 460800 bps at 50 MHZ, by 2 for 230400, by 1 for 115200 bps
 	-------------------------------------------------------------------------------
 	-- Maquinas de Estado
 	-------------------------------------------------------------------------------
