@@ -21,7 +21,8 @@
     -- You should have received a copy of the GNU General Public License
     -- along with JART (Just Another Ray Tracer).  If not, see <http://www.gnu.org/licenses/>.
 
--- The following code is a 1 Clock Fixed Square Root. Where's the catch? , well I simulate it through a lot of values (not really a simulation, just an openoffice electronic sheet), and found the maximum error is 6%. This error could be huge in terms of precision, but reasonable in terms of 1 CLOCK (maybe 2 CLOCKS) of fxd sq root latency.
+-- The following code is a 1 Clock Fixed Square Root. Where's the catch? , well I simulate it through a lot of values (not really a simulation, just an openoffice electronic sheet), and found the maximum error is 6%. This error could be huge in terms of accuracy, but reasonable in terms of 1 CLOCK (maybe 2 CLOCKS) of fxd sq root latency.
+-- Im using an Altera's Cyclone III and the combinatorial sqrt goes from 12 ns to 18 ns of propagation, using a 50 MHZ clock I make such claim of 1 Clk per calculated sqrtroot, (however we still have to see about that, when implemented in a complex architecture).
 	
 library ieee;
 use ieee.std_logic_1164.all;
