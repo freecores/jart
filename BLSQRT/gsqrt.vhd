@@ -21,7 +21,7 @@
     -- You should have received a copy of the GNU General Public License
     -- along with JART (Just Another Ray Tracer).  If not, see <http://www.gnu.org/licenses/>.
 
--- The following code is a 1 Clock Fixed Square Root. Where's the catch? , well I simulate it through a lot of values (not really a simulation, just an openoffice electronic sheet), and found the maximum error is 6%. This error could be huge in terms of precision, but reasonable in terms of 1 CLOCK (maybe 2 CLOCKS) of fxd sq root latency.
+-- The following code is a 1 Clock Fixed Square Root. Where's the catch? , well I simulated it through a lot of values (not really a simulation, just an openoffice electronic sheet), and found the maximum error is 6%. This error could be huge in terms of accuracy, but reasonable in terms of 1 CLOCK (maybe 2 CLOCKS) of fxd sq root latency. Still not yet a comparison with the FP sqrt made. What do you expect? Its hard when you are on your own.
 
 library ieee;
 use ieee.std_logic_1164.all;
