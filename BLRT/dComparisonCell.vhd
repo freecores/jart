@@ -1,3 +1,27 @@
+-- Author : Julian Andres Guarin Reyes.
+-- Project : JART, Just Another Ray Tracer.
+-- email : jguarin2002 at gmail.com, j.guarin at javeriana.edu.co
+
+-- This code was entirely written by Julian Andres Guarin Reyes.
+-- The following code is licensed under GNU Public License
+-- http://www.gnu.org/licenses/gpl-3.0.txt.
+
+ -- This file is part of JART (Just Another Ray Tracer).
+
+    -- JART (Just Another Ray Tracer) is free software: you can redistribute it and/or modify
+    -- it under the terms of the GNU General Public License as published by
+    -- the Free Software Foundation, either version 3 of the License, or
+    -- (at your option) any later version.
+
+    -- JART (Just Another Ray Tracer) is distributed in the hope that it will be useful,
+    -- but WITHOUT ANY WARRANTY; without even the implied warranty of
+    -- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    -- GNU General Public License for more details.
+
+    -- You should have received a copy of the GNU General Public License
+    -- along with JART (Just Another Ray Tracer).  If not, see <http://www.gnu.org/licenses/>.
+
+-- A single fixed minimun distance comparison cell.
 library ieee;
 
 use ieee.std_logic_1164.all;
@@ -33,12 +57,12 @@ end entity;
 
 architecture rtl of dComparisonCell is 
 
-	signal sl32 : std_logic;	-- This signal indicates if refvd is less than colvd
+	signal ssl32 : std_logic;	-- This signal indicates if refvd is less than colvd
 
 begin
 
 	-- A less than B comparison, check if colvd is less than refvd, meaning the act V.D less than actual max V.D
-	cl32			: l32	port map (	dataa	=> colvd, 
+	cl32			: sl32	port map (	dataa	=> colvd, 
 										datab	=> refvd,
 										AlB		=> sl32
 										);
@@ -47,7 +71,7 @@ begin
 	selector		: scanFF	generic map (	W = 32	)
 								port map	(	clk 	=> clk,
 												rst 	=> rst,
-												scLoad 	=> sl32,
+												scLoad 	=> ssl32,
 												extData => colvd,
 												dStage	=> refvd,
 												qStage 	=> selvd);
@@ -65,7 +89,7 @@ begin
 			
 		elsif rising_edge(clk) then 
 		
-			if sl32 ='0' then
+			if ssl32 ='0' then
 				
 				-- If reference V.D. is less than column V.D then shift the reference id. 
 				cIdq <= cIdd;
