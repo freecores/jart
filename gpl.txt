@@ -1,0 +1,355 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+
+
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <title>File: src/gpl.txt</title>
+    <link rel="stylesheet" type="text/css" href="gpl_files/srcb.css">
+    </head><body>
+<div class="top"><table padding="0" border="0" cellpadding="1px" cellspacing="0" width="100%"><tbody><tr><td>File: src/gpl.txt</td>
+<td class="uplink"><a href="http://viral.media.mit.edu/peers/doc/bf7ae982a4a311a15c7bb3f9664399452c82b535.html" title="Directory: src">[up]</a>&nbsp;</td>
+</tr></tbody></table></div><br>
+<code></code><pre><div class="cbox">
+<a name="line1" href="#line1">  1</a> 		    GNU GENERAL PUBLIC LICENSE
+<a name="line2" href="#line2">  2</a> 		       Version 2, June 1991
+<a name="line3" href="#line3">  3</a>
+<a name="line4" href="#line4">  4</a>  Copyright (C) 1989, 1991 Free Software Foundation, Inc.
+<a name="line5" href="#line5">  5</a>                  51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+<a name="line6" href="#line6">  6</a>  Everyone is permitted to copy and distribute verbatim copies
+<a name="line7" href="#line7">  7</a>  of this license document, but changing it is not allowed.
+<a name="line8" href="#line8">  8</a>
+<a name="line9" href="#line9">  9</a> 			    Preamble
+<a name="line10" href="#line10"> 10</a>
+<a name="line11" href="#line11"> 11</a>   The licenses for most software are designed to take away your
+<a name="line12" href="#line12"> 12</a> freedom to share and change it.  By contrast, the GNU General Public
+<a name="line13" href="#line13"> 13</a> License is intended to guarantee your freedom to share and change free
+<a name="line14" href="#line14"> 14</a> software--to make sure the software is free for all its users.  This
+<a name="line15" href="#line15"> 15</a> General Public License applies to most of the Free Software
+<a name="line16" href="#line16"> 16</a> Foundation's software and to any other program whose authors commit to
+<a name="line17" href="#line17"> 17</a> using it.  (Some other Free Software Foundation software is covered by
+<a name="line18" href="#line18"> 18</a> the GNU Library General Public License instead.)  You can apply it to
+<a name="line19" href="#line19"> 19</a> your programs, too.
+<a name="line20" href="#line20"> 20</a>
+<a name="line21" href="#line21"> 21</a>   When we speak of free software, we are referring to freedom, not
+<a name="line22" href="#line22"> 22</a> price.  Our General Public Licenses are designed to make sure that you
+<a name="line23" href="#line23"> 23</a> have the freedom to distribute copies of free software (and charge for
+<a name="line24" href="#line24"> 24</a> this service if you wish), that you receive source code or can get it
+<a name="line25" href="#line25"> 25</a> if you want it, that you can change the software or use pieces of it
+<a name="line26" href="#line26"> 26</a> in new free programs; and that you know you can do these things.
+<a name="line27" href="#line27"> 27</a>
+<a name="line28" href="#line28"> 28</a>   To protect your rights, we need to make restrictions that forbid
+<a name="line29" href="#line29"> 29</a> anyone to deny you these rights or to ask you to surrender the rights.
+<a name="line30" href="#line30"> 30</a> These restrictions translate to certain responsibilities for you if you
+<a name="line31" href="#line31"> 31</a> distribute copies of the software, or if you modify it.
+<a name="line32" href="#line32"> 32</a>
+<a name="line33" href="#line33"> 33</a>   For example, if you distribute copies of such a program, whether
+<a name="line34" href="#line34"> 34</a> gratis or for a fee, you must give the recipients all the rights that
+<a name="line35" href="#line35"> 35</a> you have.  You must make sure that they, too, receive or can get the
+<a name="line36" href="#line36"> 36</a> source code.  And you must show them these terms so they know their
+<a name="line37" href="#line37"> 37</a> rights.
+<a name="line38" href="#line38"> 38</a>
+<a name="line39" href="#line39"> 39</a>   We protect your rights with two steps: (1) copyright the software, and
+<a name="line40" href="#line40"> 40</a> (2) offer you this license which gives you legal permission to copy,
+<a name="line41" href="#line41"> 41</a> distribute and/or modify the software.
+<a name="line42" href="#line42"> 42</a>
+<a name="line43" href="#line43"> 43</a>   Also, for each author's protection and ours, we want to make certain
+<a name="line44" href="#line44"> 44</a> that everyone understands that there is no warranty for this free
+<a name="line45" href="#line45"> 45</a> software.  If the software is modified by someone else and passed on, we
+<a name="line46" href="#line46"> 46</a> want its recipients to know that what they have is not the original, so
+<a name="line47" href="#line47"> 47</a> that any problems introduced by others will not reflect on the original
+<a name="line48" href="#line48"> 48</a> authors' reputations.
+<a name="line49" href="#line49"> 49</a>
+<a name="line50" href="#line50"> 50</a>   Finally, any free program is threatened constantly by software
+<a name="line51" href="#line51"> 51</a> patents.  We wish to avoid the danger that redistributors of a free
+<a name="line52" href="#line52"> 52</a> program will individually obtain patent licenses, in effect making the
+<a name="line53" href="#line53"> 53</a> program proprietary.  To prevent this, we have made it clear that any
+<a name="line54" href="#line54"> 54</a> patent must be licensed for everyone's free use or not licensed at all.
+<a name="line55" href="#line55"> 55</a>
+<a name="line56" href="#line56"> 56</a>   The precise terms and conditions for copying, distribution and
+<a name="line57" href="#line57"> 57</a> modification follow.
+<a name="line58" href="#line58"> 58</a>
+<a name="line59" href="#line59"> 59</a> 		    GNU GENERAL PUBLIC LICENSE
+<a name="line60" href="#line60"> 60</a>    TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+<a name="line61" href="#line61"> 61</a>
+<a name="line62" href="#line62"> 62</a>   0. This License applies to any program or other work which contains
+<a name="line63" href="#line63"> 63</a> a notice placed by the copyright holder saying it may be distributed
+<a name="line64" href="#line64"> 64</a> under the terms of this General Public License.  The "Program", below,
+<a name="line65" href="#line65"> 65</a> refers to any such program or work, and a "work based on the Program"
+<a name="line66" href="#line66"> 66</a> means either the Program or any derivative work under copyright law:
+<a name="line67" href="#line67"> 67</a> that is to say, a work containing the Program or a portion of it,
+<a name="line68" href="#line68"> 68</a> either verbatim or with modifications and/or translated into another
+<a name="line69" href="#line69"> 69</a> language.  (Hereinafter, translation is included without limitation in
+<a name="line70" href="#line70"> 70</a> the term "modification".)  Each licensee is addressed as "you".
+<a name="line71" href="#line71"> 71</a>
+<a name="line72" href="#line72"> 72</a> Activities other than copying, distribution and modification are not
+<a name="line73" href="#line73"> 73</a> covered by this License; they are outside its scope.  The act of
+<a name="line74" href="#line74"> 74</a> running the Program is not restricted, and the output from the Program
+<a name="line75" href="#line75"> 75</a> is covered only if its contents constitute a work based on the
+<a name="line76" href="#line76"> 76</a> Program (independent of having been made by running the Program).
+<a name="line77" href="#line77"> 77</a> Whether that is true depends on what the Program does.
+<a name="line78" href="#line78"> 78</a>
+<a name="line79" href="#line79"> 79</a>   1. You may copy and distribute verbatim copies of the Program's
+<a name="line80" href="#line80"> 80</a> source code as you receive it, in any medium, provided that you
+<a name="line81" href="#line81"> 81</a> conspicuously and appropriately publish on each copy an appropriate
+<a name="line82" href="#line82"> 82</a> copyright notice and disclaimer of warranty; keep intact all the
+<a name="line83" href="#line83"> 83</a> notices that refer to this License and to the absence of any warranty;
+<a name="line84" href="#line84"> 84</a> and give any other recipients of the Program a copy of this License
+<a name="line85" href="#line85"> 85</a> along with the Program.
+<a name="line86" href="#line86"> 86</a>
+<a name="line87" href="#line87"> 87</a> You may charge a fee for the physical act of transferring a copy, and
+<a name="line88" href="#line88"> 88</a> you may at your option offer warranty protection in exchange for a fee.
+<a name="line89" href="#line89"> 89</a>
+<a name="line90" href="#line90"> 90</a>   2. You may modify your copy or copies of the Program or any portion
+<a name="line91" href="#line91"> 91</a> of it, thus forming a work based on the Program, and copy and
+<a name="line92" href="#line92"> 92</a> distribute such modifications or work under the terms of Section 1
+<a name="line93" href="#line93"> 93</a> above, provided that you also meet all of these conditions:
+<a name="line94" href="#line94"> 94</a>
+<a name="line95" href="#line95"> 95</a>     a) You must cause the modified files to carry prominent notices
+<a name="line96" href="#line96"> 96</a>     stating that you changed the files and the date of any change.
+<a name="line97" href="#line97"> 97</a>
+<a name="line98" href="#line98"> 98</a>     b) You must cause any work that you distribute or publish, that in
+<a name="line99" href="#line99"> 99</a>     whole or in part contains or is derived from the Program or any
+<a name="line100" href="#line100">100</a>     part thereof, to be licensed as a whole at no charge to all third
+<a name="line101" href="#line101">101</a>     parties under the terms of this License.
+<a name="line102" href="#line102">102</a>
+<a name="line103" href="#line103">103</a>     c) If the modified program normally reads commands interactively
+<a name="line104" href="#line104">104</a>     when run, you must cause it, when started running for such
+<a name="line105" href="#line105">105</a>     interactive use in the most ordinary way, to print or display an
+<a name="line106" href="#line106">106</a>     announcement including an appropriate copyright notice and a
+<a name="line107" href="#line107">107</a>     notice that there is no warranty (or else, saying that you provide
+<a name="line108" href="#line108">108</a>     a warranty) and that users may redistribute the program under
+<a name="line109" href="#line109">109</a>     these conditions, and telling the user how to view a copy of this
+<a name="line110" href="#line110">110</a>     License.  (Exception: if the Program itself is interactive but
+<a name="line111" href="#line111">111</a>     does not normally print such an announcement, your work based on
+<a name="line112" href="#line112">112</a>     the Program is not required to print an announcement.)
+<a name="line113" href="#line113">113</a>
+<a name="line114" href="#line114">114</a> These requirements apply to the modified work as a whole.  If
+<a name="line115" href="#line115">115</a> identifiable sections of that work are not derived from the Program,
+<a name="line116" href="#line116">116</a> and can be reasonably considered independent and separate works in
+<a name="line117" href="#line117">117</a> themselves, then this License, and its terms, do not apply to those
+<a name="line118" href="#line118">118</a> sections when you distribute them as separate works.  But when you
+<a name="line119" href="#line119">119</a> distribute the same sections as part of a whole which is a work based
+<a name="line120" href="#line120">120</a> on the Program, the distribution of the whole must be on the terms of
+<a name="line121" href="#line121">121</a> this License, whose permissions for other licensees extend to the
+<a name="line122" href="#line122">122</a> entire whole, and thus to each and every part regardless of who wrote it.
+<a name="line123" href="#line123">123</a>
+<a name="line124" href="#line124">124</a> Thus, it is not the intent of this section to claim rights or contest
+<a name="line125" href="#line125">125</a> your rights to work written entirely by you; rather, the intent is to
+<a name="line126" href="#line126">126</a> exercise the right to control the distribution of derivative or
+<a name="line127" href="#line127">127</a> collective works based on the Program.
+<a name="line128" href="#line128">128</a>
+<a name="line129" href="#line129">129</a> In addition, mere aggregation of another work not based on the Program
+<a name="line130" href="#line130">130</a> with the Program (or with a work based on the Program) on a volume of
+<a name="line131" href="#line131">131</a> a storage or distribution medium does not bring the other work under
+<a name="line132" href="#line132">132</a> the scope of this License.
+<a name="line133" href="#line133">133</a>
+<a name="line134" href="#line134">134</a>   3. You may copy and distribute the Program (or a work based on it,
+<a name="line135" href="#line135">135</a> under Section 2) in object code or executable form under the terms of
+<a name="line136" href="#line136">136</a> Sections 1 and 2 above provided that you also do one of the following:
+<a name="line137" href="#line137">137</a>
+<a name="line138" href="#line138">138</a>     a) Accompany it with the complete corresponding machine-readable
+<a name="line139" href="#line139">139</a>     source code, which must be distributed under the terms of Sections
+<a name="line140" href="#line140">140</a>     1 and 2 above on a medium customarily used for software interchange; or,
+<a name="line141" href="#line141">141</a>
+<a name="line142" href="#line142">142</a>     b) Accompany it with a written offer, valid for at least three
+<a name="line143" href="#line143">143</a>     years, to give any third party, for a charge no more than your
+<a name="line144" href="#line144">144</a>     cost of physically performing source distribution, a complete
+<a name="line145" href="#line145">145</a>     machine-readable copy of the corresponding source code, to be
+<a name="line146" href="#line146">146</a>     distributed under the terms of Sections 1 and 2 above on a medium
+<a name="line147" href="#line147">147</a>     customarily used for software interchange; or,
+<a name="line148" href="#line148">148</a>
+<a name="line149" href="#line149">149</a>     c) Accompany it with the information you received as to the offer
+<a name="line150" href="#line150">150</a>     to distribute corresponding source code.  (This alternative is
+<a name="line151" href="#line151">151</a>     allowed only for noncommercial distribution and only if you
+<a name="line152" href="#line152">152</a>     received the program in object code or executable form with such
+<a name="line153" href="#line153">153</a>     an offer, in accord with Subsection b above.)
+<a name="line154" href="#line154">154</a>
+<a name="line155" href="#line155">155</a> The source code for a work means the preferred form of the work for
+<a name="line156" href="#line156">156</a> making modifications to it.  For an executable work, complete source
+<a name="line157" href="#line157">157</a> code means all the source code for all modules it contains, plus any
+<a name="line158" href="#line158">158</a> associated interface definition files, plus the scripts used to
+<a name="line159" href="#line159">159</a> control compilation and installation of the executable.  However, as a
+<a name="line160" href="#line160">160</a> special exception, the source code distributed need not include
+<a name="line161" href="#line161">161</a> anything that is normally distributed (in either source or binary
+<a name="line162" href="#line162">162</a> form) with the major components (compiler, kernel, and so on) of the
+<a name="line163" href="#line163">163</a> operating system on which the executable runs, unless that component
+<a name="line164" href="#line164">164</a> itself accompanies the executable.
+<a name="line165" href="#line165">165</a>
+<a name="line166" href="#line166">166</a> If distribution of executable or object code is made by offering
+<a name="line167" href="#line167">167</a> access to copy from a designated place, then offering equivalent
+<a name="line168" href="#line168">168</a> access to copy the source code from the same place counts as
+<a name="line169" href="#line169">169</a> distribution of the source code, even though third parties are not
+<a name="line170" href="#line170">170</a> compelled to copy the source along with the object code.
+<a name="line171" href="#line171">171</a>
+<a name="line172" href="#line172">172</a>   4. You may not copy, modify, sublicense, or distribute the Program
+<a name="line173" href="#line173">173</a> except as expressly provided under this License.  Any attempt
+<a name="line174" href="#line174">174</a> otherwise to copy, modify, sublicense or distribute the Program is
+<a name="line175" href="#line175">175</a> void, and will automatically terminate your rights under this License.
+<a name="line176" href="#line176">176</a> However, parties who have received copies, or rights, from you under
+<a name="line177" href="#line177">177</a> this License will not have their licenses terminated so long as such
+<a name="line178" href="#line178">178</a> parties remain in full compliance.
+<a name="line179" href="#line179">179</a>
+<a name="line180" href="#line180">180</a>   5. You are not required to accept this License, since you have not
+<a name="line181" href="#line181">181</a> signed it.  However, nothing else grants you permission to modify or
+<a name="line182" href="#line182">182</a> distribute the Program or its derivative works.  These actions are
+<a name="line183" href="#line183">183</a> prohibited by law if you do not accept this License.  Therefore, by
+<a name="line184" href="#line184">184</a> modifying or distributing the Program (or any work based on the
+<a name="line185" href="#line185">185</a> Program), you indicate your acceptance of this License to do so, and
+<a name="line186" href="#line186">186</a> all its terms and conditions for copying, distributing or modifying
+<a name="line187" href="#line187">187</a> the Program or works based on it.
+<a name="line188" href="#line188">188</a>
+<a name="line189" href="#line189">189</a>   6. Each time you redistribute the Program (or any work based on the
+<a name="line190" href="#line190">190</a> Program), the recipient automatically receives a license from the
+<a name="line191" href="#line191">191</a> original licensor to copy, distribute or modify the Program subject to
+<a name="line192" href="#line192">192</a> these terms and conditions.  You may not impose any further
+<a name="line193" href="#line193">193</a> restrictions on the recipients' exercise of the rights granted herein.
+<a name="line194" href="#line194">194</a> You are not responsible for enforcing compliance by third parties to
+<a name="line195" href="#line195">195</a> this License.
+<a name="line196" href="#line196">196</a>
+<a name="line197" href="#line197">197</a>   7. If, as a consequence of a court judgment or allegation of patent
+<a name="line198" href="#line198">198</a> infringement or for any other reason (not limited to patent issues),
+<a name="line199" href="#line199">199</a> conditions are imposed on you (whether by court order, agreement or
+<a name="line200" href="#line200">200</a> otherwise) that contradict the conditions of this License, they do not
+<a name="line201" href="#line201">201</a> excuse you from the conditions of this License.  If you cannot
+<a name="line202" href="#line202">202</a> distribute so as to satisfy simultaneously your obligations under this
+<a name="line203" href="#line203">203</a> License and any other pertinent obligations, then as a consequence you
+<a name="line204" href="#line204">204</a> may not distribute the Program at all.  For example, if a patent
+<a name="line205" href="#line205">205</a> license would not permit royalty-free redistribution of the Program by
+<a name="line206" href="#line206">206</a> all those who receive copies directly or indirectly through you, then
+<a name="line207" href="#line207">207</a> the only way you could satisfy both it and this License would be to
+<a name="line208" href="#line208">208</a> refrain entirely from distribution of the Program.
+<a name="line209" href="#line209">209</a>
+<a name="line210" href="#line210">210</a> If any portion of this section is held invalid or unenforceable under
+<a name="line211" href="#line211">211</a> any particular circumstance, the balance of the section is intended to
+<a name="line212" href="#line212">212</a> apply and the section as a whole is intended to apply in other
+<a name="line213" href="#line213">213</a> circumstances.
+<a name="line214" href="#line214">214</a>
+<a name="line215" href="#line215">215</a> It is not the purpose of this section to induce you to infringe any
+<a name="line216" href="#line216">216</a> patents or other property right claims or to contest validity of any
+<a name="line217" href="#line217">217</a> such claims; this section has the sole purpose of protecting the
+<a name="line218" href="#line218">218</a> integrity of the free software distribution system, which is
+<a name="line219" href="#line219">219</a> implemented by public license practices.  Many people have made
+<a name="line220" href="#line220">220</a> generous contributions to the wide range of software distributed
+<a name="line221" href="#line221">221</a> through that system in reliance on consistent application of that
+<a name="line222" href="#line222">222</a> system; it is up to the author/donor to decide if he or she is willing
+<a name="line223" href="#line223">223</a> to distribute software through any other system and a licensee cannot
+<a name="line224" href="#line224">224</a> impose that choice.
+<a name="line225" href="#line225">225</a>
+<a name="line226" href="#line226">226</a> This section is intended to make thoroughly clear what is believed to
+<a name="line227" href="#line227">227</a> be a consequence of the rest of this License.
+<a name="line228" href="#line228">228</a>
+<a name="line229" href="#line229">229</a>   8. If the distribution and/or use of the Program is restricted in
+<a name="line230" href="#line230">230</a> certain countries either by patents or by copyrighted interfaces, the
+<a name="line231" href="#line231">231</a> original copyright holder who places the Program under this License
+<a name="line232" href="#line232">232</a> may add an explicit geographical distribution limitation excluding
+<a name="line233" href="#line233">233</a> those countries, so that distribution is permitted only in or among
+<a name="line234" href="#line234">234</a> countries not thus excluded.  In such case, this License incorporates
+<a name="line235" href="#line235">235</a> the limitation as if written in the body of this License.
+<a name="line236" href="#line236">236</a>
+<a name="line237" href="#line237">237</a>   9. The Free Software Foundation may publish revised and/or new versions
+<a name="line238" href="#line238">238</a> of the General Public License from time to time.  Such new versions will
+<a name="line239" href="#line239">239</a> be similar in spirit to the present version, but may differ in detail to
+<a name="line240" href="#line240">240</a> address new problems or concerns.
+<a name="line241" href="#line241">241</a>
+<a name="line242" href="#line242">242</a> Each version is given a distinguishing version number.  If the Program
+<a name="line243" href="#line243">243</a> specifies a version number of this License which applies to it and "any
+<a name="line244" href="#line244">244</a> later version", you have the option of following the terms and conditions
+<a name="line245" href="#line245">245</a> either of that version or of any later version published by the Free
+<a name="line246" href="#line246">246</a> Software Foundation.  If the Program does not specify a version number of
+<a name="line247" href="#line247">247</a> this License, you may choose any version ever published by the Free Software
+<a name="line248" href="#line248">248</a> Foundation.
+<a name="line249" href="#line249">249</a>
+<a name="line250" href="#line250">250</a>   10. If you wish to incorporate parts of the Program into other free
+<a name="line251" href="#line251">251</a> programs whose distribution conditions are different, write to the author
+<a name="line252" href="#line252">252</a> to ask for permission.  For software which is copyrighted by the Free
+<a name="line253" href="#line253">253</a> Software Foundation, write to the Free Software Foundation; we sometimes
+<a name="line254" href="#line254">254</a> make exceptions for this.  Our decision will be guided by the two goals
+<a name="line255" href="#line255">255</a> of preserving the free status of all derivatives of our free software and
+<a name="line256" href="#line256">256</a> of promoting the sharing and reuse of software generally.
+<a name="line257" href="#line257">257</a>
+<a name="line258" href="#line258">258</a> 			    NO WARRANTY
+<a name="line259" href="#line259">259</a>
+<a name="line260" href="#line260">260</a>   11. BECAUSE THE PROGRAM IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
+<a name="line261" href="#line261">261</a> FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.  EXCEPT WHEN
+<a name="line262" href="#line262">262</a> OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES
+<a name="line263" href="#line263">263</a> PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED
+<a name="line264" href="#line264">264</a> OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+<a name="line265" href="#line265">265</a> MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  THE ENTIRE RISK AS
+<a name="line266" href="#line266">266</a> TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU.  SHOULD THE
+<a name="line267" href="#line267">267</a> PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING,
+<a name="line268" href="#line268">268</a> REPAIR OR CORRECTION.
+<a name="line269" href="#line269">269</a>
+<a name="line270" href="#line270">270</a>   12. IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+<a name="line271" href="#line271">271</a> WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
+<a name="line272" href="#line272">272</a> REDISTRIBUTE THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES,
+<a name="line273" href="#line273">273</a> INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING
+<a name="line274" href="#line274">274</a> OUT OF THE USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED
+<a name="line275" href="#line275">275</a> TO LOSS OF DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY
+<a name="line276" href="#line276">276</a> YOU OR THIRD PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER
+<a name="line277" href="#line277">277</a> PROGRAMS), EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE
+<a name="line278" href="#line278">278</a> POSSIBILITY OF SUCH DAMAGES.
+<a name="line279" href="#line279">279</a>
+<a name="line280" href="#line280">280</a> 		     END OF TERMS AND CONDITIONS
+<a name="line281" href="#line281">281</a>
+<a name="line282" href="#line282">282</a> 	    How to Apply These Terms to Your New Programs
+<a name="line283" href="#line283">283</a>
+<a name="line284" href="#line284">284</a>   If you develop a new program, and you want it to be of the greatest
+<a name="line285" href="#line285">285</a> possible use to the public, the best way to achieve this is to make it
+<a name="line286" href="#line286">286</a> free software which everyone can redistribute and change under these terms.
+<a name="line287" href="#line287">287</a>
+<a name="line288" href="#line288">288</a>   To do so, attach the following notices to the program.  It is safest
+<a name="line289" href="#line289">289</a> to attach them to the start of each source file to most effectively
+<a name="line290" href="#line290">290</a> convey the exclusion of warranty; and each file should have at least
+<a name="line291" href="#line291">291</a> the "copyright" line and a pointer to where the full notice is found.
+<a name="line292" href="#line292">292</a>
+<a name="line293" href="#line293">293</a>     &lt;one line to give the program's name and a brief idea of what it does.&gt;
+<a name="line294" href="#line294">294</a>     Copyright (C) &lt;year&gt;  &lt;name of author&gt;
+<a name="line295" href="#line295">295</a>
+<a name="line296" href="#line296">296</a>     This program is free software; you can redistribute it and/or modify
+<a name="line297" href="#line297">297</a>     it under the terms of the GNU General Public License as published by
+<a name="line298" href="#line298">298</a>     the Free Software Foundation; either version 2 of the License, or
+<a name="line299" href="#line299">299</a>     (at your option) any later version.
+<a name="line300" href="#line300">300</a>
+<a name="line301" href="#line301">301</a>     This program is distributed in the hope that it will be useful,
+<a name="line302" href="#line302">302</a>     but WITHOUT ANY WARRANTY; without even the implied warranty of
+<a name="line303" href="#line303">303</a>     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+<a name="line304" href="#line304">304</a>     GNU General Public License for more details.
+<a name="line305" href="#line305">305</a>
+<a name="line306" href="#line306">306</a>     You should have received a copy of the GNU General Public License
+<a name="line307" href="#line307">307</a>     along with this program; if not, write to the Free Software
+<a name="line308" href="#line308">308</a>     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+<a name="line309" href="#line309">309</a>
+<a name="line310" href="#line310">310</a>
+<a name="line311" href="#line311">311</a> Also add information on how to contact you by electronic and paper mail.
+<a name="line312" href="#line312">312</a>
+<a name="line313" href="#line313">313</a> If the program is interactive, make it output a short notice like this
+<a name="line314" href="#line314">314</a> when it starts in an interactive mode:
+<a name="line315" href="#line315">315</a>
+<a name="line316" href="#line316">316</a>     Gnomovision version 69, Copyright (C) year name of author
+<a name="line317" href="#line317">317</a>     Gnomovision comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
+<a name="line318" href="#line318">318</a>     This is free software, and you are welcome to redistribute it
+<a name="line319" href="#line319">319</a>     under certain conditions; type `show c' for details.
+<a name="line320" href="#line320">320</a>
+<a name="line321" href="#line321">321</a> The hypothetical commands `show w' and `show c' should show the appropriate
+<a name="line322" href="#line322">322</a> parts of the General Public License.  Of course, the commands you use may
+<a name="line323" href="#line323">323</a> be called something other than `show w' and `show c'; they could even be
+<a name="line324" href="#line324">324</a> mouse-clicks or menu items--whatever suits your program.
+<a name="line325" href="#line325">325</a>
+<a name="line326" href="#line326">326</a> You should also get your employer (if you work as a programmer) or your
+<a name="line327" href="#line327">327</a> school, if any, to sign a "copyright disclaimer" for the program, if
+<a name="line328" href="#line328">328</a> necessary.  Here is a sample; alter the names:
+<a name="line329" href="#line329">329</a>
+<a name="line330" href="#line330">330</a>   Yoyodyne, Inc., hereby disclaims all copyright interest in the program
+<a name="line331" href="#line331">331</a>   `Gnomovision' (which makes passes at compilers) written by James Hacker.
+<a name="line332" href="#line332">332</a>
+<a name="line333" href="#line333">333</a>   &lt;signature of Ty Coon&gt;, 1 April 1989
+<a name="line334" href="#line334">334</a>   Ty Coon, President of Vice
+<a name="line335" href="#line335">335</a>
+<a name="line336" href="#line336">336</a> This General Public License does not permit incorporating your program into
+<a name="line337" href="#line337">337</a> proprietary programs.  If your program is a subroutine library, you may
+<a name="line338" href="#line338">338</a> consider it more useful to permit linking proprietary applications with the
+<a name="line339" href="#line339">339</a> library.  If this is what you want to do, use the GNU Library General
+<a name="line340" href="#line340">340</a> Public License instead of this License.
+</div></pre>
+</body></html>
