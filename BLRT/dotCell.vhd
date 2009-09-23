@@ -34,7 +34,9 @@ entity dotCell is
 				rst		: in std_logic;
 				
 				-- Object control.
-				nxtRow	: in std_logic; -- This bit controls when the sphere center goes to the next row.
+				nxtSphere	: in std_logic; -- This signal controls when the sphere center goes to the next row.
+				nxtRay		: in std_logic; -- This signal controls when the ray goes to the next column.
+				
 				-- First Side.
 				vxInput		: in std_logic_vector(levelW-1 downto 0);
 				vyInput		: in std_logic_vector(levelW-1 downto 0);
@@ -51,47 +53,85 @@ entity dotCell is
 				dzInput		: in std_logic_vector(levelW-1 downto 0);
 				
 				--Fourth Side (Opposite to the third one)
-				dxOutput		: in std_logic_vector(levelW-1 downto 0);
-				dyOutput		: in std_logic_vector(levelW-1 downto 0);
-				dzOutput		: in std_logic_vector(levelW-1 downto 0);
+				dxOutput		: out std_logic_vector(levelW-1 downto 0);
+				dyOutput		: out std_logic_vector(levelW-1 downto 0);
+				dzOutput		: out std_logic_vector(levelW-1 downto 0);
 				
 				--Fifth Side (Going to the floor right upstairs!)
-				vdOutput		: out std_logic_vector(nLevelW-1 downto 0); -- Dot product.
+				vdOutput		: out std_logic_vector(nLevelW-1 downto 0) -- Dot product.
 				
 	);
-	end port;
+	
 end entity;
 
 
-architecture rtl of rtCell is 
+architecture rtl of dotCell is 
 
 
-	signal svd	: std_logic_vector (nLevelW - 1 downto 0);
+	signal s36vd	: std_logic_vector (2*LevelW-1 downto 0);
+	signal s36m0	: std_logic_vector (2*levelW-1 downto 0);
+	signal s36m1	: std_logic_vector (2*levelW-1 downto 0);
+	signal s36m2	: std_logic_vector (2*levelW-1 downto 0);
+	
+	signal pAdd	: std_logic_vector (levelW-1 downto 0);
+	
 	
 begin
 
 	-- The Dotprod Machine
-	vd	: dp18 port map (
-		clock0	=> clk,
-		dataa_0	=> dxInput,
-		dataa_1 => dyInput,
-		dataa_2 => dzInput,
-		datab_0	=> vxInput,
-		datab_1 => vyInput,
-		datab_2 => vzInput,
-		result	=> svd
+	
+	-- 18x18 1 stage pipe Multipliers.
+	m0	: p1m18 port map (
+		aclr 	=> not(rst),
+		clken 	=> nxtRay,
+		clock 	=> clk,
+		dataa	=> vxInput,
+		datab	=> dxInput,
+		result	=> s36m0
+		);
+	m1	: p1m18 port map (
+		aclr 	=> not(rst),
+		clken 	=> nxtRay,
+		clock 	=> clk,
+		dataa	=> vyInput,
+		datab	=> dyInput,
+		result	=> s36m1
+		);
+	m2	: p1m18 port map (
+		aclr 	=> not(rst),
+		clken 	=> nxtRay,
+		clock 	=> clk,
+		dataa	=> vzInput,
+		datab	=> dzInput,
+		result	=> s36m2
 		);
 		
+	--  36 bits a+b+c 1 stage pipe Adder. 
+	a0	: p1ax	generic map ( W = 36 )
+				port map (
+		clk		=> clk,
+		rst		=> rst,
+		enable	=> nxtRay,
+		dataa	=> s36m0,
+		datab	=> s36m1,
+		datac	=> s36m2,
+		result	=> s36vd
+		);
+		
+	-- Truncate the less signifcative 4 bits 35 downto 4.
+	vdOutput <= s36vd (2*levelW-1 downto 2*levelW-nLevelW);
+		
 	-- Ray PipeLine
-	rayPipeStage : process (clk,rst)
+	rayPipeStage : process (clk,rst,nxtRay)
 	begin	
+
 		if rst = '0' then
 			-- There is no ray load yet.
 			dxOutput <= (others => '0');
 			dyOutput <= (others => '0');
 			dzOutput <= (others => '0');
 			
-		elsif rising_edge (clk) then
+		elsif rising_edge (clk) and nxtRay='1' then
 		
 			-- Set 
 			dxOutput <= dxInput;
@@ -103,7 +143,7 @@ begin
 	end process;
 
 	-- Sphere Pipe Line
-	spherePipeStage : process (clk,rts)
+	spherePipeStage : process (clk,rst,nxtSphere)
 	begin
 		if rst = '0' then
 
@@ -112,7 +152,7 @@ begin
 			vyOutput <= (others => '0');
 			vzOutput <= (others => '0');
 			
-		elsif rising_edge (clk) and nxtRow ='1' then
+		elsif rising_edge (clk) and nxtSphere ='1' then
 		
 			-- Shift sphere to the next row.
 			vxOutput <= vxInput;
@@ -123,21 +163,6 @@ begin
 		
 	end process;
 	
-	-- Upper Level
-	vdPipeStage	: process (clk,rst)
-	begin
-	
-		if rst='0' then
-			
-			vdOutput <= (others => '0');
-			
-		elsif rising_edge(clk) then
-			
-			vdOutput  <= svd;
-		
-		end if;
-		
-	end process;
 	
 		
 end rtl;
