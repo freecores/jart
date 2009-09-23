@@ -29,19 +29,16 @@ use work.powerGrid.all;
 
 
 entity kComparisonCell is
-	generic (	W 		: integer := 32;
-				idW		: integer := 12	
-			);
+	generic (	W 		: integer := 32	);
 	port (		
-				clk			: in std_logic;
-				rst			: in std_logic;
+				clk,rst		: in std_logic;
 	
-				nxtRow	: in std_logic; -- Controls when the sphere goes to the next Row. 
-				vdinput	: in std_logic_vector (W-1 downto 0);
-				kinput	: in std_logic_vector (W-1 downto 0);
-				koutput	: out std_logic_vector (W-1 downto 0);
+				nxtSphere	: in std_logic; -- Controls when the sphere goes to the next Row. 
+				kinput		: in std_logic_vector (W-1 downto 0);
+				koutput		: out std_logic_vector (W-1 downto 0);
 				
-				sDP			: out std_logic_vector (W-1 downto 0) -- Selected dot product.
+				vdinput		: in std_logic_vector (W-1 downto 0);	-- V.D input.
+				vdoutput	: out std_logic_vector (W-1 downto 0)	-- Selected dot product.
 				
 				
 	);
@@ -51,63 +48,50 @@ end entity;
 
 architecture rtl of kComparisonCell is 
 
-	signal ssge32	: std_logic;	-- Greater or equal signed signal.
+	signal ssge32	: std_logic;	-- Signed "Greater or equal  than" signal.
 
 begin
 
-	-- Instantiation of the compare.
-	discriminantCompare : ge32 port map (
-		dataa	 => vdinput,
-		datab	 => kinput,
-		AgeB	 => ssge32
-	);
-
+	comparison : sge32 port map (
+		dataa	=> vdinput,
+		datab 	=> kinput,
+		AgeB	=> ssge32
+		);
 
 	-- When ssge32 (greater or equal signal) is set then V.D > kte, therefore intersection is confirmed and  V.D is to be shifted to the distance comparison grid.
-	
-	intersectionSelector : for i in 0 to W-1 generate
-
-		selector : process (rst,clk)
-		begin
+	selector : process (rst,clk,ssg32)
+	begin
 			
-			if rst='0' then
+		if rst='0' then
 				
-				-- At the beginning set the Maximum over Maximum distance.
-				if i = W-1 then
-					sDP (i) <= '0';
-				else 
-					sDP (i) <= '1';
-				end if;
+			-- At the beginning set the Maximum over Maximum distance.
+			vdoutput <= '0' & (others =>'1');
 				
-			elsif rising_edge(clk) then 
+		elsif rising_edge(clk) then 
 				
-				if i = W-1 then
-					sDP (i) <= ssge32 and vdinput(i);
-				else
-					sDP (i) <= (ssge32 and vdinput(i)) or not(ssge32);
-				end if;
-			
+			if ssge32 = '1' then -- If VD ids grater or equal than K .....
+				vdoutput <= vdinput;
+			else
+				vdoutput <= '0' & (others =>'1');
 			end if;
-		
-		end process;
 			
-	end generate; 
+		end if;
+		
+	end process;
+			
+	-- Behavioral : When nxtSphere is set, the Sphere and its K constant should go the the next row
 
-	kPipeStage : process (clk,rst)
+	kPipeStage : process (clk,rst,nxtSphere)
 	begin
 	
 		if rst='0' then
 			
 			koutput <= (others => '0');
 		
-		elsif rising_edge(clk) and nxtRow='1' then
-			
+		elsif rising_edge(clk) and nxtSphere ='1' then
+				
 			koutput <= kinput;
 			
-		else -- Avoid Latch Inference
-		
-			koutput <= koutput;
-		
 		end if;
 	
 	end process;
