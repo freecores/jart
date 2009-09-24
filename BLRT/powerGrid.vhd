@@ -138,8 +138,8 @@ package powerGrid is
 					clk			: in std_logic;
 					rst			: in std_logic;
 		
-					nxtRow	: in std_logic; -- Controls when the sphere goes to the next Row. 
-					
+					nxtSphere	: in std_logic; -- Controls when the sphere goes to the next Row. 
+					pipeOn		: in std_logic; -- Enables / Disables the upwarding flow.
 					vdinput	: in std_logic_vector (W-1 downto 0);
 					kinput	: in std_logic_vector (W-1 downto 0);
 					koutput	: out std_logic_vector (W-1 downto 0);
