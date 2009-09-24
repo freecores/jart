@@ -144,7 +144,7 @@ package powerGrid is
 					kinput	: in std_logic_vector (W-1 downto 0);
 					koutput	: out std_logic_vector (W-1 downto 0);
 					
-					sDP			: out std_logic_vector (W-1 downto 0) -- Selected dot product.					
+					vdoutput: out std_logic_vector (W-1 downto 0) -- Selected dot product.					
 		);
 	end component;
 		
