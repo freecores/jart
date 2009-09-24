@@ -25,11 +25,11 @@ entity floor0Row is
 			col	: integer := 4;	 	-- Number of Colums
 	);
 	port (	-- Input Control Signal
-			clk, rst, nxtRay, nxtSphere	: in std_logic;
+			clk, rst, nxtRay : in std_logic;
 			-- Clk, Rst, the usual control signals.
 			-- enabled, the machine is running when this input is set.
 			-- enabled, all the counters begin again.
-				
+			nxtSphere : in std_logic_vector (col-1 downto 0); 	
 				 
 				
 			-- Input Values
@@ -67,7 +67,7 @@ begin
 			
 			clk			=> clk,
 			rst			=> rst,
-			nxtSphere	=> nxtSphere,
+			nxtSphere	=> nxtSphere(i),
 			nxtRay		=> nxtRay,
 			vxInput		=> iSphrCenterx((i+1)*viw-1 downto i*viw),
 			vyInput		=> iSphrCentery((i+1)*viw-1 downto i*viw),
