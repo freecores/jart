@@ -34,6 +34,7 @@ entity kComparisonCell is
 				clk,rst		: in std_logic;
 	
 				nxtSphere	: in std_logic; -- Controls when the sphere goes to the next Row. 
+				pipeOn		: in std_logic; -- Enables / Disable the upwarding flow.
 				kinput		: in std_logic_vector (W-1 downto 0);
 				koutput		: out std_logic_vector (W-1 downto 0);
 				
@@ -59,7 +60,7 @@ begin
 		);
 
 	-- When ssge32 (greater or equal signal) is set then V.D > kte, therefore intersection is confirmed and  V.D is to be shifted to the distance comparison grid.
-	selector : process (rst,clk,ssg32)
+	selector : process (rst,clk,ssg32,pipeOn)
 	begin
 			
 		if rst='0' then
@@ -67,7 +68,7 @@ begin
 			-- At the beginning set the Maximum over Maximum distance.
 			vdoutput <= '0' & (others =>'1');
 				
-		elsif rising_edge(clk) then 
+		elsif rising_edge(clk) and pipeOn ='1' then 
 				
 			if ssge32 = '1' then -- If VD ids grater or equal than K .....
 				vdoutput <= vdinput;
