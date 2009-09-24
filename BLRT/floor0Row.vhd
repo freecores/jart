@@ -1,18 +1,28 @@
--- This is a template for generate a grid row in the JART control.
+-- Author : Julian Andres Guarin Reyes.
+-- Project : JART, Just Another Ray Tracer.
+-- email : jguarin2002 at gmail.com, j.guarin at javeriana.edu.co
 
--- The question is : ¿ Should I use all tiles of the row registered? Well for sure there are two possibilities :
--- 1 . Dont register them: But for there is going to be a maximun number of columns where porpagation times are going to be
--- too high in order to substain a one clock upwards pipe. It depends upon the platform you are using how many columns you can implement in the row without registering them.
+-- This code was entirely written by Julian Andres Guarin Reyes.
+-- The following code is licensed under GNU Public License
+-- http://www.gnu.org/licenses/gpl-3.0.txt.
 
--- Ray Difussion Pipe Longitude (
--- Row Ray Difussion Time ( RRDT ) in clks: 2 + log 2 (Number of Columns) clks. 
--- An excellent difussion Time, but the max number of columns its limited by the platform specs.
--- Even it is an excellent time is not much of gain because this time is the same time of the pipe longitude, thus a result each clock is achieved anyway.
+ -- This file is part of JART (Just Another Ray Tracer).
 
- 
+    -- JART (Just Another Ray Tracer) is free software: you can redistribute it and/or modify
+    -- it under the terms of the GNU General Public License as published by
+    -- the Free Software Foundation, either version 3 of the License, or
+    -- (at your option) any later version.
 
--- 2. Register them 
+    -- JART (Just Another Ray Tracer) is distributed in the hope that it will be useful,
+    -- but WITHOUT ANY WARRANTY; without even the implied warranty of
+    -- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    -- GNU General Public License for more details.
 
+    -- You should have received a copy of the GNU General Public License
+    -- along with JART (Just Another Ray Tracer).  If not, see <http://www.gnu.org/licenses/>.
+	
+	
+-- This file is an instantiation of a dot cells row. The number of dot cells used is parameterizable.
 library ieee;
 use ieee.std_logic_1164.all;
 use work.powerGrid.all;
@@ -50,8 +60,6 @@ entity floor0Row is
 			vdOutput : out std_logic_vector (nlw*col - 1 downto 0) -- The dot product emerging from each dot prod cell. 
 	);
 end entity;
-				
-
 				
 architecture rtl of floor0Row is
 
