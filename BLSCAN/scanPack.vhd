@@ -10,18 +10,10 @@ package scanPack is
 	component scanFF
 		generic (	W		: integer := 8);	-- Word width
 		port	(	
-					-- Flip flop regular control
-					rst 	: in std_logic;
-					clk		: in std_logic;
+					clk,rst,ena,sel		: std_logic; -- The usual  control signals
 					
-					-- This signal selectes which data is to be load on ff q.
-					scLoad	: in std_logic;
-					
-					-- These words are the ones to be selected by scLoad to be load on ff q.
-					extData	: in std_logic_vector (W-1 downto 0);	-- External Data to be load in q when  scLoad is 1.
-					dStage	: in std_logic_vector (W-1 downto 0);	-- Previous chain stage.
-					
-					qStage	: out std_logic_vector (W-1 downto 0)	-- ff q.
+					d0,d1				: std_logic_vector (W-1 downto 0);	-- The two operands.
+					q					: std_logic_vector (W-1 downto 0)	-- The selected data.
 		);
 	end component;
 	
@@ -29,13 +21,14 @@ package scanPack is
 		generic (	CHAINSIZE	: integer := 3;
 					W			: integer := 1);
 		port	(
-			rst		: in std_logic;
-			clk		: in std_logic;
-			
-			scLoad	: in std_logic; -- Enable data load.
-			
-			scIn	: in std_logic_vector (CHAINSIZE*W-1 downto 0); -- External data
-			scOut	: out std_logic_vector (W - 1 downto 0)
+					clk,rst,ena		: std_logic; -- The usual control signals.
+					
+					sel				: std_logic_vector (W-1 downto 0); -- Selection signals.
+						
+					d0				: in std_logic_vector(W-1 downto 0); -- Youngest Chain Data.
+					q				: out std_logic_vector(W-1 downto 0); -- Oldest chain Data.
+					d1				: in std_logic_vector (W*CHAINSIZE-1 downto 0); -- Unchained external data.
+					chain			: out std_logic_vector (W*CHAINSIZE-1 downto 0); -- Chain data going out for selection function.		
 		);
 	end component;
 

@@ -32,54 +32,53 @@ entity scanChain is
 	generic (	CHAINSIZE : integer := 4; 
 				W : integer := 32);
 	port (
-		rst		: in std_logic;
-		clk 	: in std_logic;
-		
-		scLoad	: in std_logic;	--Enable Shift.
-
-		scIn	: in std_logic_vector ((CHAINSIZE*W)-1 downto 0); -- Los bits de entrada
-		scOut	: out std_logic_vector (W - 1 downto 0)
+	
+			clk,rst,ena		: std_logic; -- The usual control signals.
+			
+			sel				: std_logic_vector (W-1 downto 0); -- Selection signals.
+				
+			d0				: in std_logic_vector(W-1 downto 0); -- Youngest Chain Data.
+			q				: out std_logic_vector(W-1 downto 0); -- Oldest chain Data.
+			d1				: in std_logic_vector (W*CHAINSIZE-1 downto 0); -- Unchained external data.
+			
+			chain			: out std_logic_vector (W*CHAINSIZE-1 downto 0); -- Chain data going out for selection function.
+			
 	);
+			
 	
 end entity;
 
 architecture rtl of scanChain is
 
 	-- The Scan Chain.
-	signal sScan	: std_logic_vector ((CHAINSIZE*W)-1 downto 0);
+	signal sd0	: std_logic_vector (((CHAINSIZE+1)*W)-1 downto 0);
 	
 begin
 	-- Conectar la salida.
-	scOut <= sScan ((CHAINSIZE*W)-1 downto ((CHAINSIZE-1)*W)); 
+	q <= sd0 (((CHAINSIZE+1)*W)-1 downto CHAINSIZE*W);
+
+	-- Conectar la cadena hacia afuera.
+	chain <= sd0 (W*CHAINSIZE)-1 downto 0);
 	
-
-		
-
 	theChain: for i in 0 to CHAINSIZE-1 generate
 			
-		scanStage0 : if (i=0) generate
-			scanStageZero : scanFF 
-				generic map	(	W => W )
-				port map 	( 	rst => rst,
-								clk => clk,	
-								scLoad => scLoad,
-								extData => scIn(W-1 downto 0),
-								dStage => (others => '0'),
-								qStage => sScan (W-1 downto 0));
-		end generate scanStage0;
-		scanStageN : if (i>0) generate
-			scanStageX : scanFF
-				generic map	(	W => W )
-				port map 	( 	rst => rst,
-								clk => clk,	
-								scLoad => scLoad,
-								extData => scIn((i+1)*W - 1 downto i*W),
-								dStage => sScan (i*W - 1 downto (i-1)*W),
-								qStage => sScan ((i+1)*W-1 downto i*W));
-				
-		end generate scanStageN;
-			
-									
+		scanStage : scanFF	
+		
+			generic map	(	W => W )
+			port map 	( 	
+							clk 	=> rst,
+							rst 	=> clk,
+							ena 	=> ena,
+							sel		=> sel(i),
+							d0 		=> sd0((i+1)*W-1 downto i*W),
+							d1		=>  d1((i+1)*W-1 downto i*W),
+							q 		=> sd0((i+2)*W-1 downto (i+1)*W)
+			);
+		
+		
+		
+
+		
 	end generate theChain;
 
 end rtl;
