@@ -34,7 +34,7 @@ entity floor1Row is
 			col	: integer := 4;	 	-- Number of Colums
 	);
 	port (	
-			-- Input Control Signal
+			-- Input Control Signals, pipe on is one when raysr going on. 
 			clk, rst	: in std_logic;
 			pipeOn		: in std_logic;
 			
@@ -63,10 +63,10 @@ begin
 			rst			=> rst,
 			nxtSphere	=> nxtSphere,
 			pipeOn		=> pipeOn,
-			vdInput		=> vdInput ((i+1)*viw-1 downto i*viw),
-			kinput		=> kInput ((i+1)*viw-1 downto i*viw),
-			koutput		=> kOutput ((i+1)*viw-1 downto i*viw),
-			vdoutput	=> vdOutput ((i+1)*viw-1 downto i*viw)
+			kinput		=> kInput	((i+1)*viw-1 downto i*viw),
+			koutput		=> kOutput	((i+1)*viw-1 downto i*viw),
+			vdinput		=> vdInput	((i+1)*viw-1 downto i*viw),
+			vdoutput	=> vdOutput	((i+1)*viw-1 downto i*viw)
 			);
 	
 	end generate;

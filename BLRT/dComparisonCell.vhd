@@ -39,8 +39,10 @@ entity dComparisonCell is
 	
 	
 	port 	(
-				clk		: in std_logic; 
-				rst		: in std_logic;
+				clk, rst, ena	: in std_logic; 
+				
+				intd : in std_logic; -- Reference intersection signal.
+				intq : out std_logic;
 				
 				cIdd	: in	std_logic_vector (idColW - 1 downto 0);	-- This is the reference column identification input.
 				cIdq	: out	std_logic_vector (idColW - 1 downto 0);	-- This is the sphere identification output.
@@ -55,7 +57,7 @@ end entity;
 architecture rtl of dComparisonCell is 
 
 	signal		ssl32 : std_logic;	-- This signal indicates if refvd is less than colvd
-	
+	signal 		qdist : std_logic_vector (idColW downto 0);
 	
 begin
 
@@ -65,22 +67,29 @@ begin
 										AlB		=> ssl32
 										);
 										
-	-- A flip flop with 2 to 1 mux.
+	-- A flip flop with 2 to 1 mux.Selects between the smallest vd.
 	selectorVD		: scanFF	generic map (	W = W	)
-								port map	(	clk 	=> clk,
-												rst 	=> rst,
-												scLoad 	=> ssl32,
-												extData => colvd,
-												dStage	=> refvd,
-												qStage 	=> selvd);
-	-- Another flip flip with 2 to 1 mux.
-	selectorID		: scanFF	generic map	( 	W = idColW )
-								port map	(	clk 	=> clk,
-												rst		=> rst,
-												scLoad	=> ssl32,
-												extData	=> CONV_STD_LOGIC(idCol,idColW),
-												dStage	=> cIdd,
-												qStage	=> cIdq 
+								port map	(	clk	=> clk,
+												rst => rst,
+												ena	=> ena,
+												sel => ssl32,
+												d0	=> refvd,
+												d1	=> colvd,
+												q 	=> selvd
+											);
+	-- Another flip flip with 2 to 1 mux. Selects the id and intersection signal of the smallest vd.
+	selectorID		: scanFF	generic map	( 	W = idColW+1 )
+								port map	(	clk => clk,
+												rst	=> rst,
+												ena	=> ena
+												sel	=> ssl32,
+												d0	=> cIdd&intd,
+												d1	=> conv_std_logic_vector(idCol,idColW)&ssl32,
+												q	=> qdist; 
 												);
+												
+	cIdq <= qdist(idColw downto 1);
+	intq <= qdist(0);
+	
 
 end rtl;
