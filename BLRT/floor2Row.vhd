@@ -44,7 +44,7 @@ entity floor2Row is
 			selvd	: out std_logic_vector (viw-1 downto 0);
 			colvd	: in std_logic_vector (viw*col-1 downto 0);
 			colid	: out std_logic_vector (idColW-1 downto 0);
-			inter	: out std_logic_vector
+			inter	: out std_logic
 	);
 end entity;
 				
@@ -55,12 +55,17 @@ architecture rtl of floor2Row is
 	signal sinter	: std_logic_vector ((col+1) - 1 downto 0);		-- The intersection on set, difussion net.
 begin
 
-	-- Conexiones hacia afuera!.
+	-- External connections.
 	
-	sinter(0)<='0';
-	scol(idColW-1 downto 0) <= (others=>'0');
+	-- The first comparison has a not yet intersection signal.
+	sinter(0)<='0'; 
+	-- The first comparison has a refernce id of 0 (Always). 
+	scolid(idColW-1 downto 0) <= (others=>'0');
+	-- The selected vd output.	
 	selvd <= srefvd ((col+1)*viw - 1 downto col*viw);
+	-- The selected sphere column.
 	colid <= scolid ((col+1)*idColW-1 downto col*idColW);
+	-- The intersection / no intersection signal.
 	inter <= sinter(col);
 
 	-- Comparadores.
