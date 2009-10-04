@@ -28,8 +28,10 @@ use ieee.std_logic_1164.all;
 use work.powerGrid.all;
 
 entity dotCell is
-	generic (	levelW	: integer := 18;	-- Actual Level Width
-				nLevelW	: integer := 32);	-- Next Level Width
+
+	generic (	RV	: string := "yes";
+				W0	: integer := 18;	-- Actual Level Width
+				W1	: integer := 32);	-- Next Level Width
 	port	(	clk		: in std_logic;
 				rst		: in std_logic;
 				
@@ -38,27 +40,27 @@ entity dotCell is
 				nxtRay		: in std_logic; -- This signal controls when the ray goes to the next column.
 				
 				-- First Side.
-				vxInput		: in std_logic_vector(levelW-1 downto 0);
-				vyInput		: in std_logic_vector(levelW-1 downto 0);
-				vzInput		: in std_logic_vector(levelW-1 downto 0);
+				vxInput		: in std_logic_vector(W0-1 downto 0);
+				vyInput		: in std_logic_vector(W0-1 downto 0);
+				vzInput		: in std_logic_vector(W0-1 downto 0);
 
 				-- Second Side (Opposite to the first one)
-				vxOutput		: out std_logic_vector(levelW-1 downto 0);
-				vyOutput		: out std_logic_vector(levelW-1 downto 0);
-				vzOutput		: out std_logic_vector(levelW-1 downto 0);
+				vxOutput		: out std_logic_vector(W0-1 downto 0);
+				vyOutput		: out std_logic_vector(W0-1 downto 0);
+				vzOutput		: out std_logic_vector(W0-1 downto 0);
 
 				-- Third Side (Perpendicular to the first and second ones)
-				dxInput		: in std_logic_vector(levelW-1 downto 0);
-				dyInput		: in std_logic_vector(levelW-1 downto 0);
-				dzInput		: in std_logic_vector(levelW-1 downto 0);
+				dxInput		: in std_logic_vector(W0-1 downto 0);
+				dyInput		: in std_logic_vector(W0-1 downto 0);
+				dzInput		: in std_logic_vector(W0-1 downto 0);
 				
 				--Fourth Side (Opposite to the third one)
-				dxOutput		: out std_logic_vector(levelW-1 downto 0);
-				dyOutput		: out std_logic_vector(levelW-1 downto 0);
-				dzOutput		: out std_logic_vector(levelW-1 downto 0);
+				dxOutput		: out std_logic_vector(W0-1 downto 0);
+				dyOutput		: out std_logic_vector(W0-1 downto 0);
+				dzOutput		: out std_logic_vector(W0-1 downto 0);
 				
 				--Fifth Side (Going to the floor right upstairs!)
-				vdOutput		: out std_logic_vector(nLevelW-1 downto 0) -- Dot product.
+				vdOutput		: out std_logic_vector(W1-1 downto 0) -- Dot product.
 				
 	);
 	
@@ -68,12 +70,12 @@ end entity;
 architecture rtl of dotCell is 
 
 
-	signal s36vd	: std_logic_vector (2*LevelW-1 downto 0);
-	signal s36m0	: std_logic_vector (2*levelW-1 downto 0);
-	signal s36m1	: std_logic_vector (2*levelW-1 downto 0);
-	signal s36m2	: std_logic_vector (2*levelW-1 downto 0);
+	signal s36vd	: std_logic_vector (2*W0-1 downto 0);
+	signal s36m0	: std_logic_vector (2*W0-1 downto 0);
+	signal s36m1	: std_logic_vector (2*W0-1 downto 0);
+	signal s36m2	: std_logic_vector (2*W0-1 downto 0);
 	
-	signal pAdd	: std_logic_vector (levelW-1 downto 0);
+	signal pAdd	: std_logic_vector (W0-1 downto 0);
 	
 	
 begin
@@ -107,8 +109,7 @@ begin
 		);
 		
 	--  36 bits a+b+c 1 stage pipe Adder. 
-	a0	: p1ax	generic map ( W = 36 )
-				port map (
+	a0	: p1ax	port map (
 		clk		=> clk,
 		rst		=> rst,
 		enable	=> nxtRay,
@@ -119,7 +120,7 @@ begin
 		);
 		
 	-- Truncate the less signifcative 4 bits 35 downto 4.
-	vdOutput <= s36vd (2*levelW-1 downto 2*levelW-nLevelW);
+	vdOutput <= s36vd (2*W0-1 downto 2*W0-W1);
 		
 	-- Ray PipeLine
 	rayPipeStage : process (clk,rst,nxtRay)
@@ -143,26 +144,30 @@ begin
 	end process;
 
 	-- Sphere Pipe Line
-	spherePipeStage : process (clk,rst,nxtSphere)
-	begin
-		if rst = '0' then
+	registerV : if RV="yes" generate
 
-		-- There is no object center yet.
-			vxOutput <= (others => '0');
-			vyOutput <= (others => '0');
-			vzOutput <= (others => '0');
+		spherePipeStage : process (clk,rst,nxtSphere)
+		begin
+			if rst = '0' then
+
+			-- There is no object center yet.
+				vxOutput <= (others => '0');
+				vyOutput <= (others => '0');
+				vzOutput <= (others => '0');
+				
+			elsif rising_edge (clk) and nxtSphere ='1' then
 			
-		elsif rising_edge (clk) and nxtSphere ='1' then
-		
-			-- Shift sphere to the next row.
-			vxOutput <= vxInput;
-			vyOutput <= vyInput;
-			vzOutput <= vzInput;
+				-- Shift sphere to the next row.
+				
+					vxOutput <= vxInput;
+					vyOutput <= vyInput;
+					vzOutput <= vzInput;
+				
+			end if;
 			
-		end if;
-		
-	end process;
+		end process;
 	
+	end generate;
 	
 		
 end rtl;
