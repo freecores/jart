@@ -104,11 +104,14 @@ package powerGrid is
 	-- V input flows through V output using a data flipflop, so turning V output in the next cell on the next row V Input. V input also flows upwards into the dotproduct 3 stage pipeline. 
 	-- D input flows through D output using a data flipflop, so turning D output in the next column cell. D input also flows upwards into the dotproduct 3 stage. 
 	component dotCell
-		generic (	
+		generic (
+		
+		-- Register V?, by default register the pass of V to the next grid. This should be NO when using a single grid cube or in the last grid of the grid array.
+		RV	: string := "yes";
 		-- Actual Level Width
-		levelW	: integer := 18;	
+		W0	: integer := 18;	
 		-- Next Level Width
-		nLevelW	: integer := 32);	
+		W1	: integer := 32);	
 		
 		port	(	
 		--The usual control signals
@@ -121,27 +124,27 @@ package powerGrid is
 		nxtRay		: in std_logic;	
 				
 		-- First Side.
-		vxInput		: in std_logic_vector(levelW-1 downto 0);
-		vyInput		: in std_logic_vector(levelW-1 downto 0);
-		vzInput		: in std_logic_vector(levelW-1 downto 0);
+		vxInput		: in std_logic_vector(W0-1 downto 0);
+		vyInput		: in std_logic_vector(W0-1 downto 0);
+		vzInput		: in std_logic_vector(W0-1 downto 0);
 
 		-- Second Side (Opposite to the first one)
-		vxOutput	: out std_logic_vector(levelW-1 downto 0);
-		vyOutput	: out std_logic_vector(levelW-1 downto 0);
-		vzOutput	: out std_logic_vector(levelW-1 downto 0);
+		vxOutput	: out std_logic_vector(W0-1 downto 0);
+		vyOutput	: out std_logic_vector(W0-1 downto 0);
+		vzOutput	: out std_logic_vector(W0-1 downto 0);
 
 		-- Third Side (Perpendicular to the first and second ones)
-		dxInput		: in std_logic_vector(levelW-1 downto 0);
-		dyInput		: in std_logic_vector(levelW-1 downto 0);
-		dzInput		: in std_logic_vector(levelW-1 downto 0);
+		dxInput		: in std_logic_vector(W0-1 downto 0);
+		dyInput		: in std_logic_vector(W0-1 downto 0);
+		dzInput		: in std_logic_vector(W0-1 downto 0);
 				
 		--Fourth Side (Opposite to the third one)
-		dxOutput	: in std_logic_vector(levelW-1 downto 0);
-		dyOutput	: in std_logic_vector(levelW-1 downto 0);
-		dzOutput	: in std_logic_vector(levelW-1 downto 0);
+		dxOutput	: in std_logic_vector(W0-1 downto 0);
+		dyOutput	: in std_logic_vector(W0-1 downto 0);
+		dzOutput	: in std_logic_vector(W0-1 downto 0);
 				
 		--Fifth Side (Going to the floor right upstairs!)
-		vdOutput	: out std_logic_vector(nLevelW-1 downto 0) -- Dot product.
+		vdOutput	: out std_logic_vector(W1-1 downto 0) -- Dot product.
 				
 		);
 	end component;
@@ -151,24 +154,20 @@ package powerGrid is
 	-- or not the sphere. If vdinput is grather or equal than kinput there's an intersection or else when vdinput is less than kinput. If there's an intersection the block sets vdinput at vdoutput,
 	-- whenever there's no intersection the output is asserted with the maximum positive distance in 32 bits : 0x7fffffff.
 	component kComparisonCell 
-		generic (	W 		: integer := 32;
-				);
-		port 	(		
-		clk			: in std_logic;
-		rst			: in std_logic;
-		
-		-- Controls when the sphere goes to the next Grid.
-		nxtSphere	: in std_logic;  
-		-- Enables / Disables the upwarding flow.
-		pipeOn		: in std_logic;
-		-- Sphere's Center vector over ray vector projection.
-		vdinput	: in std_logic_vector (W-1 downto 0);
-		-- Incoming sphere's K.
-		kinput	: in std_logic_vector (W-1 downto 0);		
-		-- Signal to connect the sphere's K to the next grid.
-		koutput	: out std_logic_vector (W-1 downto 0);
-		-- Selected dot product  : The value of this output depends upon whether or not ray sphere intersection.			
-		vdoutput: out std_logic_vector (W-1 downto 0) 					
+		generic (	
+		RK	: string	:= "yes";
+		W1	: integer	:= 32	
+		);
+		port (		
+		clk,rst		: in std_logic;
+		scanOut		: in std_logic; -- This signals overrides the 'signed greater or equal than' internal function and allows vdinput to flow upwards.
+		nxtSphere	: in std_logic; -- Controls when the sphere goes to the next Row. 
+		pipeOn		: in std_logic; -- Enables / Disable the upwarding flow.
+		kinput		: in std_logic_vector (W1-1 downto 0);
+		koutputhor	: out std_logic_vector (W1-1 downto 0);
+		koutputver	: out std_logic_vector (W1-1 downto 0);	-- K input  flowing to the next floor upstairs (but waits one clock). 
+		vdinput		: in std_logic_vector (W1-1 downto 0);	-- V.D input.
+		vdoutput	: out std_logic_vector (W1-1 downto 0)	-- Selected dot product.
 		);
 	end component;
 	-- Minimun distance Comparison.
@@ -179,37 +178,38 @@ package powerGrid is
 	component dComparisonCell
 		generic	(	
 		-- V.D, minDistance and selectD Width 
-		W 		: integer := 32;	
+		W1 		: integer := 32;	
 		-- Column Sphere ID width. 1 = 2 columns max, 2= 4 colums max... and so on.
-		idColW	: integer := 2;		
+		IDW	: integer := 2;		
 		-- Column Id
 		idCol	: integer := 0		
 		);
 		port 	(
 		-- The usual control signals.		
-		clk		: in std_logic; 
-		rst		: in std_logic;
+		clk, rst, pipeOn : in std_logic; 
+		
+		
 		-- This is the reference column identification input.
-		cIdd	: in	std_logic_vector (idColW - 1 downto 0);	
+		cIdd	: in	std_logic_vector (IDW - 1 downto 0);	
 		-- This is the result column identification output.
-		cIdq	: out	std_logic_vector (idColW - 1 downto 0);	
+		cIdq	: out	std_logic_vector (IDW - 1 downto 0);	
 		-- This is the reference projection incoming from the previous cell.
-		refvd	: in	std_logic_vector (W - 1 downto 0); 		
+		refvd	: in	std_logic_vector (W1 - 1 downto 0); 		
 		-- This is the sphere position over the ray traced vector projection.
-		colvd	: in	std_logic_vector (W - 1 downto 0); 		
+		colvd	: in	std_logic_vector (W1 - 1 downto 0); 		
 		-- This is the smallest value between refvd and colvd.
-		selvd	: out	std_logic_vector (W - 1 downto 0) 		
+		selvd	: out	std_logic_vector (W1 - 1 downto 0) 		
 		);
 	end component;
 	
 	component floor0Row
 		generic	(
 		-- Floor Level Width (V.D width)
-		nlw : integer := 32;
+		W1 : integer := 32;
 		-- Vector input Width		
-		viw : integer := 18;
+		W0 : integer := 18;
 		-- Number of Colums
-		col	: integer := 4;	 	
+		C	: integer := 4	 	
 	);
 	port (	
 		-- The usual control signals. nxtRay should be 0 whenever I want to stop the entire machine.
@@ -218,36 +218,36 @@ package powerGrid is
 		-- Clk, Rst, the usual control signals.
 		-- enabled, the machine is running when this input is set.
 		-- enabled, all the counters begin again.
-		nxtSphere : in std_logic_vector (col-1 downto 0); 	
+		nxtSphere : in std_logic_vector (C-1 downto 0); 	
 				 
 				
 		-- Input Values. 
 		-- The ray input vector.
-		iRayx: in std_logic_vector (viw - 1 downto 0);
-		iRayy: in std_logic_vector (viw - 1 downto 0);
-		iRayz: in std_logic_vector (viw - 1 downto 0); 
+		iRayx: in std_logic_vector (W0 - 1 downto 0);
+		iRayy: in std_logic_vector (W0 - 1 downto 0);
+		iRayz: in std_logic_vector (W0 - 1 downto 0); 
 		
 		-- The spheres x position (sphere centers) input vectors.
-		iSphrCenterx: in std_logic_vector (col*viw - 1 downto 0); 
+		iSphrCenterx: in std_logic_vector (C*W0 - 1 downto 0); 
 		-- The spheres y position (sphere centers) input vectors.
-		iSphrCentery: in std_logic_vector (col*viw - 1 downto 0); 
+		iSphrCentery: in std_logic_vector (C*W0 - 1 downto 0); 
 		-- The spheres z position (sphere centers) input vectors.
-		iSphrCenterz: in std_logic_vector (col*viw - 1 downto 0); 
+		iSphrCenterz: in std_logic_vector (C*W0 - 1 downto 0); 
 		-- The spheres x position (sphere centers) output vectors.
-		oSphrCenterx: out std_logic_vector (col*viw - 1 downto 0); 
+		oSphrCenterx: out std_logic_vector (C*W0 - 1 downto 0); 
 		-- The spheres y positions (sphere centes) output vectors.
-		oSphrCentery: out std_logic_vector (col*viw - 1 downto 0);
+		oSphrCentery: out std_logic_vector (C*W0 - 1 downto 0);
 		-- The spheres z positions (sphere centers) output vectors.		
-		oSphrCenterz: out std_logic_vector (col*viw - 1 downto 0);
+		oSphrCenterz: out std_logic_vector (C*W0 - 1 downto 0);
 			
 		-- Output Values
 		-- The ray output vector.
-		oRayx: out std_logic_vector (viw - 1 downto 0);
-		oRayy: out std_logic_vector (viw - 1 downto 0);
-		oRayz: out std_logic_vector (viw - 1 downto 0);
+		oRayx: out std_logic_vector (W0 - 1 downto 0);
+		oRayy: out std_logic_vector (W0 - 1 downto 0);
+		oRayz: out std_logic_vector (W0 - 1 downto 0);
 		
 		-- The dot product result from each dot prod cell.
-		vdOutput : out std_logic_vector (nlw*col - 1 downto 0)  
+		vdOutput : out std_logic_vector (W1*C - 1 downto 0)  
 		);
 	end component;
 	
@@ -259,9 +259,9 @@ package powerGrid is
 	generic	(
 	
 		-- Vector input Width	
-		viw : integer := 32;	
+		W1 : integer := 32;	
 		-- Number of Colums
-		col	: integer := 4;	 	
+		C	: integer := 4	 	
 	);
 	port (	
 	
@@ -270,15 +270,15 @@ package powerGrid is
 		pipeOn		: in std_logic;
 			
 		-- Clk, Rst, the usual control signals.
-		nxtSphere	: in std_logic_vector (col-1 downto 0);
+		nxtSphere	: in std_logic_vector (C-1 downto 0);
 
 		-- VD Input / Output.
-		vdInput	: in std_logic_vector (viw*col-1 downto 0);
-		vdOutput: out std_logic_vector (viw*col-1 downto 0);
+		vdInput	: in std_logic_vector (W1*C-1 downto 0);
+		vdOutput: out std_logic_vector (W1*C-1 downto 0);
 			
 		-- K Input / Output.
-		kInput	: in std_logic_vector (viw*col - 1 downto 0); 
-		kOutput	: out std_logic_vector (viw*col - 1 downto 0)  
+		kInput	: in std_logic_vector (W1*C - 1 downto 0); 
+		kOutput	: out std_logic_vector (W1*C - 1 downto 0)  
 	);
 	end component;
 	
@@ -287,11 +287,11 @@ package powerGrid is
 	component floor2Row 
 	generic	(
 		-- Vector input Width
-		viw : integer := 32;	
+		W1 : integer := 32;	
 		-- ID Column width
-		idColW : integer := 2;	
+		IDW : integer := 2;	
 		-- Number of Colums
-		col	: integer := 4;	 	
+		C	: integer := 4 	
 	);
 	port (	
 		-- Input Control Signal
@@ -300,15 +300,15 @@ package powerGrid is
 				
 		-- Input Values
 		-- Reference VD, the "at the moment" smallest VD sphere ray projection value.
-		refvd	: in std_logic_vector (viw-1 downto 0);
+		refvd	: in std_logic_vector (W1-1 downto 0);
 		
 		-- The smallest VD, value found.
-		selvd	: out std_logic_vector (viw-1 downto 0);
+		selvd	: out std_logic_vector (W1-1 downto 0);
 		
 		-- The column's sphere ray projection value.
-		colvd	: in std_logic_vector (viw*col-1 downto 0);
+		colvd	: in std_logic_vector (W1*C-1 downto 0);
 		-- The smallest VD projection value column id.
-		colid	: out std_logic_vector (idColW-1 downto 0);
+		colid	: out std_logic_vector (IDW-1 downto 0);
 		-- The intersection signal (1 on intersection else 0).
 		inter	: out std_logic
 	);
@@ -323,7 +323,7 @@ package powerGrid is
 		-- Input rays width.
 		W0	: integer := 18;
 		-- Dot products and spheres constant width
-		W1	: integer := 32;
+		W1	: integer := 32
 		
 		);
 	port (
@@ -361,7 +361,7 @@ package powerGrid is
 		-- R-F1
 		-- K Input / Output.
 		kInput	: in std_logic_vector (C*W1 - 1 downto 0); 
-		kOutput	: out std_logic_vector (C*W1 - 1 downto 0)  
+		kOutput	: out std_logic_vector (C*W1 - 1 downto 0);  
 		
 		--R-F2
 		-- Input Values
@@ -382,7 +382,7 @@ package powerGrid is
 		-- Input rays width.
 		W0	: integer := 18;
 		-- Dot products and spheres constant width
-		W1	: integer := 32;	IDW	: integer := 2;
+		W1	: integer := 32	
 		
 		);
 	port (
@@ -421,7 +421,7 @@ package powerGrid is
 		-- R-F1
 		-- K Input / Output.
 		kInput	: in std_logic_vector (C*W1 - 1 downto 0); 
-		kOutput	: out std_logic_vector (C*W1 - 1 downto 0)  
+		kOutput	: out std_logic_vector (C*W1 - 1 downto 0);
 		
 		--R-F2
 		-- Input Values
