@@ -29,26 +29,40 @@ use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
 
 use work.powerGrid.all;
-
+use work.scanPack.all;
 
 entity dComparisonCell is
-	generic	(	W		: integer := 32;	-- operands Width ( reference V.D and column V.D) 
-				idColW	: integer := 2;		-- Column Sphere ID width. 1 = 2 columns max, 2= 4 colums max... and so on.
-				idCol	: integer := 0 		-- Column Id
+	generic	(	
+		W1	: integer := 32;	-- operands Width ( reference V.D and column V.D) 
+		IDW	: integer := 2;		-- Column Sphere ID width. 1 = 2 columns max, 2= 4 colums max... and so on.
+		C	: integer := 0 		-- Column Id
 	);
 	
 	
 	port 	(
-				clk, rst, ena	: in std_logic; 
-				
-				intd : in std_logic; -- Reference intersection signal.
-				intq : out std_logic;
-				
-				cIdd	: in	std_logic_vector (idColW - 1 downto 0);	-- This is the reference column identification input.
-				cIdq	: out	std_logic_vector (idColW - 1 downto 0);	-- This is the sphere identification output.
-				refvd	: in	std_logic_vector (W - 1 downto 0); 		-- This is the projection incoming from the previous cell.
-				colvd	: in	std_logic_vector (W - 1 downto 0); 		-- This is the projection of the sphere position over the ray traced vector, a.k.a. V.D! .
-				selvd	: out	std_logic_vector (W - 1 downto 0) 		-- This is the smallest value between refvd and colvd.
+				-- The usual control signals.
+		clk, rst, pipeOn	: in std_logic; 
+			
+		-- Scan signals (not so usual)
+		-- scanOut disables the main comparison functionality of the cell and turns it into a scan shift.
+		-- when scanOut is set (1), scan shift mode is on, scanCommand commands what scan action is taking place,
+		-- when scanCommand is set (1), a scan load action is taking place, when is not set (0) a scan shift is taking place.
+		scanOut, scanCommand	: in std_logic;
+			
+		-- Reference intersection signal.
+		intd : in std_logic; 
+		intq : out std_logic;
+		
+		cIdd	: in	std_logic_vector (IDW - 1 downto 0);	-- This is the reference column identification input.
+		cIdq	: out	std_logic_vector (IDW - 1 downto 0);	-- This is the sphere identification output.
+		
+		refk	: in	std_logic_vector (W1 - 1 downto 0); -- This is the columns sphere constant
+		colk	: in	std_logic_vector (W1 - 1 downto 0); -- This is the reference sphere constant
+		selk	: in 	std_logic_vector (W1 - 1 downto 0); -- This is the selected sphere constant
+		
+		refvd	: in	std_logic_vector (W1 - 1 downto 0);	-- This is the projection incoming from the previous cell.
+		colvd	: in	std_logic_vector (W1 - 1 downto 0);	-- This is the projection of the sphere position over the ray traced vector, a.k.a. V.D! .
+		selvd	: out	std_logic_vector (W1 - 1 downto 0)	-- This is the smallest value between refvd and colvd.
 	);
 				
 end entity;
@@ -56,39 +70,48 @@ end entity;
 
 architecture rtl of dComparisonCell is 
 
-	signal		ssl32 : std_logic;	-- This signal indicates if refvd is less than colvd
-	signal 		qdist : std_logic_vector (idColW downto 0);
+	signal		sena	: std_logic;	-- This signal enables the scan ff.
+	signal		ssl32	: std_logic;	-- This signal indicates if refvd is less than colvd
+	signal 		qdist	: std_logic_vector (IDW+W1 downto 0);
 	
 begin
 
 	-- A less than B comparison, check if colvd is less than refvd, meaning the act V.D less than actual min V.D
-	cl32			: sl32	port map (	dataa	=> colvd, 
-										datab	=> refvd,
-										AlB		=> ssl32
-										);
+	cl32: sl32	
+	port map (	
+		dataa	=> colvd, 
+		datab	=> refvd,
+		AlB		=> ssl32
+	);
 										
 	-- A flip flop with 2 to 1 mux.Selects between the smallest vd.
-	selectorVD		: scanFF	generic map (	W = W	)
-								port map	(	clk	=> clk,
-												rst => rst,
-												ena	=> ena,
-												sel => ssl32,
-												d0	=> refvd,
-												d1	=> colvd,
-												q 	=> selvd
-											);
-	-- Another flip flip with 2 to 1 mux. Selects the id and intersection signal of the smallest vd.
-	selectorID		: scanFF	generic map	( 	W = idColW+1 )
-								port map	(	clk => clk,
-												rst	=> rst,
-												ena	=> ena
-												sel	=> ssl32,
-												d0	=> cIdd&intd,
-												d1	=> conv_std_logic_vector(idCol,idColW)&ssl32,
-												q	=> qdist; 
-												);
+	selectorVD: scanFF generic map ( W => W1)
+	port map (	
+		clk	=> clk,
+		rst => rst,
+		ena	=> pipeOn or scanOut,
+		sel => (ssl32 and not(scanOut))or(scanCommand and scanOut),
+		d0	=> refvd,
+		d1	=> colvd,
+		q 	=> selvd
+	);
+	-- Another flip flip with 2 to 1 mux. Selects the column id the intersection signal of the smallest vd and the selected K.
+	selectorID: scanFF	
+	generic map	( 	
+		W = W1+IDW+1 
+	)
+	port map (	
+		clk => clk,
+		rst	=> rst,
+		ena	=> pipeOn or scanOut,
+		sel	=> (ssl32 and not(scanOut))or(scanCommand and scanOut),
+		d0	=> refk&cIdd&intd,
+		d1	=> colk&conv_std_logic_vector(C,IDW)&ssl32,
+		q	=> qdist 
+	);
 												
-	cIdq <= qdist(idColw downto 1);
+	selk <= qdist(IDW + W1 downto IDW+1);
+	cIdq <= qdist(IDW downto 1);
 	intq <= qdist(0);
 	
 
