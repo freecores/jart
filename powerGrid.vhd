@@ -27,7 +27,18 @@ library ieee;
 use ieee.std_logic_1164.all;
 
 package powerGrid is
-
+	-- A scan flip flop, aka selectable input ff.
+	component scanFF 
+		generic	(	
+		W	: integer := 8);
+		port 	(	
+		clk,rst,ena,sel		: std_logic; -- The usual  control signals
+					
+		d0,d1 	: std_logic_vector (W-1 downto 0);	-- The two operands.
+		q		: std_logic_vector (W-1 downto 0)	-- The selected data.
+						
+		);
+	end component;
 	--A one stage pipe (1 Clk) a+b+c with w width bits in input as well as output.
 	--As a fixed signed addtion we have:
 	-- A(B,C) ====> B+C SIGNED BITS FORMAT : 1 bit for sign, B bits for integer part, C bits for decimal part. (FORMAT)
