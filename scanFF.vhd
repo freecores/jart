@@ -57,8 +57,5 @@ begin
 end rtl;
 
 		
-	end process;
-
-end rtl;
 
 
