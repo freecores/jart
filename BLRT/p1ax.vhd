@@ -1,5 +1,6 @@
 library ieee;
 use ieee.std_logic_1164.all;
+use ieee.std_logic_arith.all;
 use ieee.std_logic_signed.all;
 
 entity p1ax is 
@@ -15,13 +16,14 @@ end entity;
 
 architecture rtl of p1ax is 
 
-	signal sdresult	: std_logic_vector (W-1 downto 0);
+	signal sdresult0	: std_logic_vector (W-1 downto 0);
+	--signal sdresult1	: std_logic_vector (W-1 downto 0);
 
 
 begin
 	
-	sdresult <= dataa+datab+datac;
-
+	sdresult0 <= dataa+datab+datac;
+	--sdresult1 <= sdresult0+datac;
 	process (clk,rst,enable)
 	begin
 	
@@ -30,8 +32,9 @@ begin
 			result <= (others =>'0');
 			
 		elsif rising_edge(clk) and enable ='1' then
-			
-			result <= sdresult;
+				
+				
+			result <= sdresult0;
 		
 		end if;
 	
@@ -44,7 +47,7 @@ end rtl;
 
 
 
--
+
 	
 					
 
