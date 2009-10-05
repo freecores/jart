@@ -29,31 +29,33 @@ use ieee.std_logic_1164.all;
 entity scanFF is
 	generic	(	W	: integer := 8);
 	port 	(	
-				clk,rst,ena,sel		: std_logic; -- The usual  control signals
+		clk,rst,ena,sel		: in std_logic; -- The usual  control signals
 				
-				d0,d1				: std_logic_vector (W-1 downto 0);	-- The two operands.
-				q					: std_logic_vector (W-1 downto 0)	-- The selected data.
+		d0,d1	: in std_logic_vector (W-1 downto 0);	-- The two operands.
+		q		: out std_logic_vector (W-1 downto 0)	-- The selected data.
 					
 	);
 end entity;
 
 architecture rtl of scanFF is 
+	signal mux: std_logic_vector (W-1 downto 0);
 begin
-
-	dff_ena_sel : process (clk,rst,ena)
+	dff_ena_sel :for i in 0 to W-1 generate
+		mux(i) <= (d1(i) and sel) or (d0(i) and not(sel));
+	
+		process (clk,rst,ena)
 		
-	begin
+		begin
 			
-		if rst = '0' then
-			q <= '0' & (others => '1');
-		elsif rising_edge (clk) and ena = '1' then
-			if sel='1' then 
-				q <= d1;
-			else 
-				q <= d0;
+			if rst = '0' then
+				q(i) <= '1';
+			elsif rising_edge (clk) and ena = '1' then
+				q(i) <= mux(i);
 			end if;
-		end if;
-	end process;
+		
+		end process;
+	
+	end generate;
 end rtl;
 
 		
