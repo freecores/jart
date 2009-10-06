@@ -29,7 +29,6 @@ use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
 
 use work.powerGrid.all;
-use work.scanPack.all;
 
 entity dComparisonCell is
 	generic	(	
@@ -58,7 +57,7 @@ entity dComparisonCell is
 		
 		refk	: in	std_logic_vector (W1 - 1 downto 0); -- This is the columns sphere constant
 		colk	: in	std_logic_vector (W1 - 1 downto 0); -- This is the reference sphere constant
-		selk	: in 	std_logic_vector (W1 - 1 downto 0); -- This is the selected sphere constant
+		selk	: out 	std_logic_vector (W1 - 1 downto 0); -- This is the selected sphere constant
 		
 		refvd	: in	std_logic_vector (W1 - 1 downto 0);	-- This is the projection incoming from the previous cell.
 		colvd	: in	std_logic_vector (W1 - 1 downto 0);	-- This is the projection of the sphere position over the ray traced vector, a.k.a. V.D! .
@@ -98,7 +97,7 @@ begin
 	-- Another flip flip with 2 to 1 mux. Selects the column id the intersection signal of the smallest vd and the selected K.
 	selectorID: scanFF	
 	generic map	( 	
-		W = W1+IDW+1 
+		W => W1+IDW+1 
 	)
 	port map (	
 		clk => clk,
