@@ -32,10 +32,10 @@ package powerGrid is
 		generic	(	
 		W	: integer := 8);
 		port 	(	
-		clk,rst,ena,sel		: std_logic; -- The usual  control signals
+		clk,rst,ena,sel		: in std_logic; -- The usual  control signals
 					
-		d0,d1 	: std_logic_vector (W-1 downto 0);	-- The two operands.
-		q		: std_logic_vector (W-1 downto 0)	-- The selected data.
+		d0,d1 	: in std_logic_vector (W-1 downto 0);	-- The two operands.
+		q		: out std_logic_vector (W-1 downto 0)	-- The selected data.
 						
 		);
 	end component;
@@ -52,7 +52,7 @@ package powerGrid is
 		-- The usual control signals.
 		clk		:	 in std_logic;
 		rst		:	 in std_logic;
-		enable		:	 in std_logic;
+		enable	:	 in std_logic;
 
 		-- Operand A.
 		dataa		:	 in std_logic_vector(W-1 downto 0);
@@ -199,11 +199,16 @@ package powerGrid is
 		-- The usual control signals.		
 		clk, rst, pipeOn : in std_logic; 
 		
-		
+
+		intd	: in	std_logic;
+		intq	: out	std_logic;
 		-- This is the reference column identification input.
 		cIdd	: in	std_logic_vector (IDW - 1 downto 0);	
 		-- This is the result column identification output.
-		cIdq	: out	std_logic_vector (IDW - 1 downto 0);	
+		cIdq	: out	std_logic_vector (IDW - 1 downto 0);
+		refk	: in	std_logic_vector (W1 - 1 downto 0); -- This is the columns sphere constant
+		colk	: in	std_logic_vector (W1 - 1 downto 0); -- This is the reference sphere constant
+		selk	: out 	std_logic_vector (W1 - 1 downto 0); -- This is the selected sphere constant		
 		-- This is the reference projection incoming from the previous cell.
 		refvd	: in	std_logic_vector (W1 - 1 downto 0); 		
 		-- This is the sphere position over the ray traced vector projection.
