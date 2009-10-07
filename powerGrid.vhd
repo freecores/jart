@@ -26,7 +26,302 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
+ 
+
+
 package powerGrid is
+
+	-- R2 for size and width
+	type SIZE_WIDTH is array (0 to 1) of integer;
+	type DUPLA is array (0 to 2) of SIZE_WIDTH; 
+	
+	-- Tuple for widths
+	type WARRAY is array (0 to 2) of integer;
+	
+	-- Index 
+	constant SZINDEX: integer :=0;
+	constant WDINDEX: integer :=1;
+	
+	-- Register file for spheres.
+	-- OP1 : One sphere output per clock.
+	-- OP2 : Two sphere output per clock.
+	-- OP4 : Four sphere output per clock.
+	constant OP4		: integer := 2;
+	constant OP2		: integer := 1;
+	constant OP1		: integer := 0;
+	
+	constant SZALFA		: integer := 1;
+	constant SZBETA		: integer := 2;
+	
+	constant BUSW		: integer := 32;
+	constant HBUSW		: integer := 18;
+	
+	-- Size and Width.
+	constant REGSZADD	: WARRAY := (12,11,10);
+	constant CIDSZADD	: DUPLA := ((1,0),(2,1),(4,2));
+	
+	
+
+	
+	-- Register blocks.....
+	
+	-- 8 x 512 x 32 
+	component bt81
+		port
+		(
+		address		: in std_logic_vector (11 downto 0);
+		clken		: in std_logic ;
+		clock		: in std_logic ;
+		data		: in std_logic_vector (31 downto 0);
+		wren		: in std_logic ;
+		q			: out std_logic_vector (31 downto 0)
+		);
+	end component;
+	
+	-- 4 x 512 x 32 
+	component bt41
+		port
+		(
+		address		: in std_logic_vector (10 downto 0);
+		clken		: in std_logic ;
+		clock		: in std_logic ;
+		data		: in std_logic_vector (31 downto 0);
+		wren		: in std_logic ;
+		q			: out std_logic_vector (31 downto 0)
+		);
+	end component;
+	
+	-- 2 x 512 x 32 
+	component bt21
+		port
+		(
+		address		: in std_logic_vector (9 downto 0);
+		clken		: in std_logic ;
+		clock		: in std_logic ;
+		data		: in std_logic_vector (31 downto 0);
+		wren		: in std_logic ;
+		q			: out std_logic_vector (31 downto 0)
+		);
+	end component;
+	
+	-- 1 x 512 x 32 
+	component bt41
+		port
+		(
+		address		: in std_logic_vector (8 downto 0);
+		clken		: in std_logic ;
+		clock		: in std_logic ;
+		data		: in std_logic_vector (31 downto 0);
+		wren		: in std_logic ;
+		q			: out std_logic_vector (31 downto 0)
+		);
+	end component;
+	
+	-- 8 x 512 x 32 
+	component bt84
+		port
+		(
+		address		: in std_logic_vector (11 downto 0);
+		clken		: in std_logic ;
+		clock		: in std_logic ;
+		data		: in std_logic_vector (17 downto 0);
+		wren		: in std_logic ;
+		q			: out std_logic_vector (17 downto 0)
+		);
+	end component;
+	
+	-- 4 x 512 x 32 
+	component bt44
+		port
+		(
+		address		: in std_logic_vector (10 downto 0);
+		clken		: in std_logic ;
+		clock		: in std_logic ;
+		data		: in std_logic_vector (17 downto 0);
+		wren		: in std_logic ;
+		q			: out std_logic_vector (17 downto 0)
+		);
+	end component;
+	
+	-- 2 x 512 x 32 
+	component bt24
+		port
+		(
+		address		: in std_logic_vector (9 downto 0);
+		clken		: in std_logic ;
+		clock		: in std_logic ;
+		data		: in std_logic_vector (17 downto 0);
+		wren		: in std_logic ;
+		q			: out std_logic_vector (17 downto 0)
+		);
+	end component;
+	
+	-- 1 x 512 x 18 
+	component bt14
+		port
+		(
+		address		: in std_logic_vector (8 downto 0);
+		clken		: in std_logic ;
+		clock		: in std_logic ;
+		data		: in std_logic_vector (17 downto 0);
+		wren		: in std_logic ;
+		q			: out std_logic_vector (17 downto 0)
+		);
+	end component;
+	
+	-- Register type 1 .
+	component r1 
+		port (
+			
+			
+			clk, ena: in std_logic; -- The usual control signals.
+			
+			wen		: in std_logic_vector	(3 downto 0);
+			add		: in std_logic_vector	(8 downto 0);
+			datain	: in std_logic_vector	(BUSW-1 downto 0);-- incoming data from 32 bits width bus.
+			Vx		: out std_logic_vector	(HBUSW-1 downto 0); -- outcoming data to 54 bit width bus multiplexer selector and intersection test cube.
+			Vy		: out std_logic_vector	(HBUSW-1 downto 0); -- outcoming data to 54 bit width bus multiplexer selector and intersection test cube.
+			Vz		: out std_logic_vector	(HBUSW-1 downto 0); -- outcoming data to 54 bit width bus multiplexer selector and intersection test cube.
+			K		: out std_logic_vector	(BUSW-1 downto 0)
+		);
+	end component;
+	-- Register type 2 .
+	component r2 
+		port (
+			
+			
+			clk, ena: in std_logic; -- The usual control signals.
+			
+			wen		: in std_logic_vector	(3 downto 0);
+			add		: in std_logic_vector	(9 downto 0);
+			datain	: in std_logic_vector	(BUSW-1 downto 0);-- incoming data from 32 bits width bus.
+			Vx		: out std_logic_vector	(HBUSW-1 downto 0); -- outcoming data to 54 bit width bus multiplexer selector and intersection test cube.
+			Vy		: out std_logic_vector	(HBUSW-1 downto 0); -- outcoming data to 54 bit width bus multiplexer selector and intersection test cube.
+			Vz		: out std_logic_vector	(HBUSW-1 downto 0); -- outcoming data to 54 bit width bus multiplexer selector and intersection test cube.
+			K		: out std_logic_vector	(BUSW-1 downto 0)
+		);
+	end component;
+	-- Register type 4
+	component r4 
+		port (
+			
+			
+			clk, ena: in std_logic; -- The usual control signals.
+			
+			wen		: in std_logic_vector	(3 downto 0);
+			add		: in std_logic_vector	(10 downto 0);
+			datain	: in std_logic_vector	(BUSW-1 downto 0);-- incoming data from 32 bits width bus.
+			Vx		: out std_logic_vector	(HBUSW-1 downto 0); -- outcoming data to 54 bit width bus multiplexer selector and intersection test cube.
+			Vy		: out std_logic_vector	(HBUSW-1 downto 0); -- outcoming data to 54 bit width bus multiplexer selector and intersection test cube.
+			Vz		: out std_logic_vector	(HBUSW-1 downto 0); -- outcoming data to 54 bit width bus multiplexer selector and intersection test cube.
+			K		: out std_logic_vector	(BUSW-1 downto 0)
+		);
+	end component;-- Register type 8.
+	component r8 
+		port (
+			
+			
+			clk, ena: in std_logic; -- The usual control signals.
+			
+			wen		: in std_logic_vector	(3 downto 0);
+			add		: in std_logic_vector	(11 downto 0);
+			datain	: in std_logic_vector	(BUSW-1 downto 0);-- incoming data from 32 bits width bus.
+			Vx		: out std_logic_vector	(HBUSW-1 downto 0); -- outcoming data to 54 bit width bus multiplexer selector and intersection test cube.
+			Vy		: out std_logic_vector	(HBUSW-1 downto 0); -- outcoming data to 54 bit width bus multiplexer selector and intersection test cube.
+			Vz		: out std_logic_vector	(HBUSW-1 downto 0); -- outcoming data to 54 bit width bus multiplexer selector and intersection test cube.
+			K		: out std_logic_vector	(BUSW-1 downto 0)
+		);
+	end component;
+	
+	
+	-- Register Option mode 1
+	component rop1 
+		generic (
+			SZMODE	: integer	:= SZBETA 	-- By default use the 50% of the max memory for sphere register block.
+		);
+		port (
+			
+			
+			clk, ena: in std_logic; -- The usual control signals.
+			wen		: in std_logic_vector	(3 downto 0);
+			add		: in std_logic_vector	(REGSZADD(OP1)-SZMODE downto 0);
+			datain	: in std_logic_vector	(BUSW-1 downto 0);-- incoming data from 32 bits width bus.
+			Vx		: out std_logic_vector	(2*HBUSW-1 downto 0); -- outcoming data to 54 bit width bus multiplexer selector and intersection test cube.
+			Vy		: out std_logic_vector	(2*HBUSW-1 downto 0); -- outcoming data to 54 bit width bus multiplexer selector and intersection test cube.
+			Vz		: out std_logic_vector	(2*HBUSW-1 downto 0); -- outcoming data to 54 bit width bus multiplexer selector and intersection test cube.
+			K		: out std_logic_vector	(2*BUSW-1 downto 0)
+		);
+	
+	end component;
+	
+	-- Register Option mode 2
+	component rop2 
+		generic (
+			SZMODE	: integer	:= SZBETA 	-- By default use the 50% of the max memory for sphere register block.
+		);
+		port (
+			
+			
+			clk, ena: in std_logic; -- The usual control signals.
+			wen		: in std_logic_vector	(7 downto 0);
+			add		: in std_logic_vector	(REGSZADD(OP2)-SZMODE downto 0);
+			datain	: in std_logic_vector	(BUSW-1 downto 0);-- incoming data from 32 bits width bus.
+			Vx		: out std_logic_vector	(2*HBUSW-1 downto 0); -- outcoming data to 54 bit width bus multiplexer selector and intersection test cube.
+			Vy		: out std_logic_vector	(2*HBUSW-1 downto 0); -- outcoming data to 54 bit width bus multiplexer selector and intersection test cube.
+			Vz		: out std_logic_vector	(2*HBUSW-1 downto 0); -- outcoming data to 54 bit width bus multiplexer selector and intersection test cube.
+			K		: out std_logic_vector	(2*BUSW-1 downto 0)
+		);
+	
+	end component;
+
+	-- Register Option mode 2
+	component rop4 
+		generic (
+			SZMODE	: integer	:= SZBETA 	-- By default use the 50% of the max memory for sphere register block.
+		);
+		port (
+			
+			
+			clk, ena: in std_logic; -- The usual control signals.
+			wen		: in std_logic_vector	(15 downto 0);
+			add		: in std_logic_vector	(REGSZADD(OP4)-SZMODE downto 0);
+			datain	: in std_logic_vector	(BUSW-1 downto 0);-- incoming data from 32 bits width bus.
+			Vx		: out std_logic_vector	(4*HBUSW-1 downto 0); -- outcoming data to 54 bit width bus multiplexer selector and intersection test cube.
+			Vy		: out std_logic_vector	(4*HBUSW-1 downto 0); -- outcoming data to 54 bit width bus multiplexer selector and intersection test cube.
+			Vz		: out std_logic_vector	(4*HBUSW-1 downto 0); -- outcoming data to 54 bit width bus multiplexer selector and intersection test cube.
+			K		: out std_logic_vector	(4*BUSW-1 downto 0)
+		);
+	
+	end component;
+	
+	
+	-- Sphere Register Block
+	component sphereRegisterBlock 
+		generic (
+		
+			OPMODE	: integer := OP4; 		-- By default push out 4 spheres at same time.
+			SZMODE	: integer := SZBETA;	-- By default the max sphere numbers is 2048, but could be 4096 with SZALFA.
+		
+		);
+		port (
+			
+			
+			clk, ena: in std_logic; -- The usual control signals.
+			
+			wen		: in std_logic_vector	(CIDSZADD(OPMODE(SZINDEX))*4-1 downto 0);	-- Write enable signals
+			add		: in std_logic_vector	(REGSZADD(OPMODE)-SZMODE  downto 0);		-- Address bus
+			
+			datain	: in std_logic_vector	(BUSW-1 downto 0);	-- incoming data from 32 bits width bus.
+			
+			Vx		: out std_logic_vector	(OPMODE*HBUSW-1 downto 0); -- outcoming data to 54 bit width bus multiplexer selector and intersection test cube.
+			Vy		: out std_logic_vector	(OPMODE*HBUSW-1 downto 0); -- outcoming data to 54 bit width bus multiplexer selector and intersection test cube.
+			Vz		: out std_logic_vector	(OPMODE*HBUSW-1 downto 0); -- outcoming data to 54 bit width bus multiplexer selector and intersection test cube.
+			K		: out std_logic_vector	(OPMODE*BUSW-1 downto 0)
+			
+		);
+	
+	end entity;	
+	
 	-- A scan flip flop, aka selectable input ff.
 	component scanFF 
 		generic	(	
@@ -150,9 +445,9 @@ package powerGrid is
 		dzInput		: in std_logic_vector(W0-1 downto 0);
 				
 		--Fourth Side (Opposite to the third one)
-		dxOutput	: in std_logic_vector(W0-1 downto 0);
-		dyOutput	: in std_logic_vector(W0-1 downto 0);
-		dzOutput	: in std_logic_vector(W0-1 downto 0);
+		dxOutput	: out std_logic_vector(W0-1 downto 0);
+		dyOutput	: out std_logic_vector(W0-1 downto 0);
+		dzOutput	: out std_logic_vector(W0-1 downto 0);
 				
 		--Fifth Side (Going to the floor right upstairs!)
 		vdOutput	: out std_logic_vector(W1-1 downto 0) -- Dot product.
