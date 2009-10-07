@@ -30,77 +30,81 @@ use work.powerGrid.all;
 
 entity floor0Row is
 	generic	(
-			nlw : integer := 32;	-- Next Level Width (V.D width)
-			viw : integer := 18;	-- Vector input Width
-			col	: integer := 4;	 	-- Number of Colums
+			W1 : integer := 32;	-- Next Level Width (V.D width)
+			W0 : integer := 18;	-- Vector input Width
+			C	: integer := 4	 	-- Number of Colums
 	);
 	port (	-- Input Control Signal
 			clk, rst, nxtRay : in std_logic;
 			-- Clk, Rst, the usual control signals.
 			-- enabled, the machine is running when this input is set.
 			-- enabled, all the counters begin again.
-			nxtSphere : in std_logic_vector (col-1 downto 0); 	
+			nxtSphere : in std_logic_vector (C-1 downto 0); 	
 				 
 				
 			-- Input Values
-			iRayx: in std_logic_vector (viw - 1 downto 0);
-			iRayy: in std_logic_vector (viw - 1 downto 0);
-			iRayz: in std_logic_vector (viw - 1 downto 0); -- The ray input vector.
-			iSphrCenterx: in std_logic_vector (col*viw - 1 downto 0); -- The spheres positions (sphere centers) input vectors.
-			iSphrCentery: in std_logic_vector (col*viw - 1 downto 0); -- The spheres positions (sphere centers) input vectors.
-			iSphrCenterz: in std_logic_vector (col*viw - 1 downto 0); -- The spheres positions (sphere centers) input vectors.
-			oSphrCenterx: out std_logic_vector (col*viw - 1 downto 0); -- The spheres positions (sphere centers) input vectors.
-			oSphrCentery: out std_logic_vector (col*viw - 1 downto 0); -- The spheres positions (sphere centers) input vectors.
-			oSphrCenterz: out std_logic_vector (col*viw - 1 downto 0); -- The spheres positions (sphere centers) input vectors.
+			iRayx: in std_logic_vector (W0 - 1 downto 0);
+			iRayy: in std_logic_vector (W0 - 1 downto 0);
+			iRayz: in std_logic_vector (W0 - 1 downto 0); -- The ray input vector.
+			iSphrCenterx: in std_logic_vector (C*W0 - 1 downto 0); -- The spheres positions (sphere centers) input vectors.
+			iSphrCentery: in std_logic_vector (C*W0 - 1 downto 0); -- The spheres positions (sphere centers) input vectors.
+			iSphrCenterz: in std_logic_vector (C*W0 - 1 downto 0); -- The spheres positions (sphere centers) input vectors.
+			oSphrCenterx: out std_logic_vector (C*W0 - 1 downto 0); -- The spheres positions (sphere centers) input vectors.
+			oSphrCentery: out std_logic_vector (C*W0 - 1 downto 0); -- The spheres positions (sphere centers) input vectors.
+			oSphrCenterz: out std_logic_vector (C*W0 - 1 downto 0); -- The spheres positions (sphere centers) input vectors.
 				
 			-- Output Values
-			oRayx: out std_logic_vector (viw - 1 downto 0);-- The ray output vector.
-			oRayy: out std_logic_vector (viw - 1 downto 0);-- The ray output vector.
-			oRayz: out std_logic_vector (viw - 1 downto 0);-- The ray output vector.
-			vdOutput : out std_logic_vector (nlw*col - 1 downto 0) -- The dot product emerging from each dot prod cell. 
+			oRayx: out std_logic_vector (W0 - 1 downto 0);-- The ray output vector.
+			oRayy: out std_logic_vector (W0 - 1 downto 0);-- The ray output vector.
+			oRayz: out std_logic_vector (W0 - 1 downto 0);-- The ray output vector.
+			vdOutput : out std_logic_vector (W1*C - 1 downto 0) -- The dot product emerging from each dot prod cell. 
 	);
 end entity;
 				
 architecture rtl of floor0Row is
 
-	signal sRayx	: std_logic_vector ((col+1)*viw - 1 downto 0);	-- The ray difussion nets.
-	signal sRayy	: std_logic_vector ((col+1)*viw - 1 downto 0);	-- The ray difussion nets.
-	signal sRayz	: std_logic_vector ((col+1)*viw - 1 downto 0);	-- The ray difussion nets.
+	signal sRayx	: std_logic_vector ((C+1)*W0 - 1 downto 0);	-- The ray difussion nets.
+	signal sRayy	: std_logic_vector ((C+1)*W0 - 1 downto 0);	-- The ray difussion nets.
+	signal sRayz	: std_logic_vector ((C+1)*W0 - 1 downto 0);	-- The ray difussion nets.
 	
 begin
 
-	theCells : for i in 0 to col-1 generate
+	theCells : for i in 0 to C-1 generate
 	
-		dotCellx : dotCell port map (
+		dotCellx : dotCell 
+		generic map (
+			RV => "no"
+		)
+		port map (
 			
 			clk			=> clk,
 			rst			=> rst,
 			nxtSphere	=> nxtSphere(i),
 			nxtRay		=> nxtRay,
-			vxInput		=> iSphrCenterx((i+1)*viw-1 downto i*viw),
-			vyInput		=> iSphrCentery((i+1)*viw-1 downto i*viw),
-			vzInput		=> iSphrCenterz((i+1)*viw-1 downto i*viw),
-			vxOutput	=> oSphrCenterx((i+1)*viw-1 downto i*viw),
-			vyOutput	=> oSphrCentery((i+1)*viw-1 downto i*viw),
-			vzOutput	=> oSphrCenterz((i+1)*viw-1 downto i*viw),
-			dxInput		=> sRayx ((i+1)*viw-1 downto i*viw),
-			dyInput		=> sRayx ((i+1)*viw-1 downto i*viw),
-			dzInput		=> sRayx ((i+1)*viw-1 downto i*viw),
-			dxOutput	=> sRayx ((i+2)*viw-1 downto (i+1)*viw),
-			dyOutput	=> sRayx ((i+2)*viw-1 downto (i+1)*viw),
-			dzOutput	=> sRayx ((i+2)*viw-1 downto (i+1)*viw),
-			vdOutput	=> vdOutput((i+1)*view-1 downto i*viw)
+			vxInput		=> iSphrCenterx((i+1)*W0-1 downto i*W0),
+			vyInput		=> iSphrCentery((i+1)*W0-1 downto i*W0),
+			vzInput		=> iSphrCenterz((i+1)*W0-1 downto i*W0),
+			vxOutput	=> oSphrCenterx((i+1)*W0-1 downto i*W0),
+			vyOutput	=> oSphrCentery((i+1)*W0-1 downto i*W0),
+			vzOutput	=> oSphrCenterz((i+1)*W0-1 downto i*W0),
+			dxInput		=> sRayx ((i+1)*W0-1 downto i*W0),
+			dyInput		=> sRayy ((i+1)*W0-1 downto i*W0),
+			dzInput		=> sRayz ((i+1)*W0-1 downto i*W0),
+			dxOutput	=> sRayx ((i+2)*W0-1 downto (i+1)*W0),
+			dyOutput	=> sRayy ((i+2)*W0-1 downto (i+1)*W0),
+			dzOutput	=> sRayz ((i+2)*W0-1 downto (i+1)*W0),
+			vdOutput	=> vdOutput((i+1)*W1-1 downto i*W1)
 			);
 
 	end generate;
 
 	-- Connect the first and last rays.
-	sRayx (viw-1 downto 0)	<= iRayx;
-	sRayy (viw-1 downto 0) 	<= iRayy;
-	sRayz (viw-1 downto 0) 	<= iRayz;
-	oRayx 					<= sRayx ((col+1)*viw - 1 downto col*viw);
-	oRayy					<= sRayy ((col+1)*viw - 1 downto col*viw);
-	oRayz					<= sRayz ((col+1)*viw - 1 downto col*viw);
+	sRayx (W0-1 downto 0)	<= iRayx;
+	sRayy (W0-1 downto 0) 	<= iRayy;
+	sRayz (W0-1 downto 0) 	<= iRayz;
+	oRayx 					<= sRayx ((C+1)*W0 - 1 downto C*W0);
+	oRayy					<= sRayy ((C+1)*W0 - 1 downto C*W0);
+	oRayz					<= sRayz ((C+1)*W0 - 1 downto C*W0);
 
 end rtl;
 				
