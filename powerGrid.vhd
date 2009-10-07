@@ -117,7 +117,7 @@ package powerGrid is
 		);
 	end component;
 	
-	-- 8 x 512 x 32 
+	-- 8 x 512 x 18 
 	component bt84
 		port
 		(
