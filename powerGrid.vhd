@@ -105,7 +105,7 @@ package powerGrid is
 	end component;
 	
 	-- 1 x 512 x 32 
-	component bt41
+	component bt11
 		port
 		(
 		address		: in std_logic_vector (8 downto 0);
@@ -130,7 +130,7 @@ package powerGrid is
 		);
 	end component;
 	
-	-- 4 x 512 x 32 
+	-- 4 x 512 x 18 
 	component bt44
 		port
 		(
@@ -143,7 +143,7 @@ package powerGrid is
 		);
 	end component;
 	
-	-- 2 x 512 x 32 
+	-- 2 x 512 x 18 
 	component bt24
 		port
 		(
