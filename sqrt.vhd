@@ -18,9 +18,7 @@ entity sqrt is
 		clk,rst,ena : in std_logic;
 		
 		radical		: in std_logic_vector (W2-1 downto 0);
-		sho			: out std_logic;
-		a,b,x,y		: out std_logic_vector ((W2/2)-1 downto 0);
-		decoder 	: out integer range 0 to (W2/2)-1
+		root		: out std_logic_vector ((W2/2)-1 downto 0)
 	);
 end entity;
 
@@ -36,6 +34,10 @@ architecture rtl of sqrt is
 	signal sa2,sb2,sx2,sy2				: std_logic_vector (WP-1 downto 0);	
 	signal localenc1					: integer range 0 to WP-1;
 	signal localenc2					: integer range 0 to WP-1;
+	signal sho							: std_logic;
+	signal a,b,x,y						: std_logic_vector ((W2/2)-1 downto 0);
+	signal decoder 						: integer range 0 to (W2/2)-1;
+	signal ab,xy						: std_logic_vector (W2-1 downto 0);
 	
 	
 	begin 
@@ -53,6 +55,12 @@ architecture rtl of sqrt is
 		-- Stage 1 : Function for signal Y.
 		muxs1(i) <= sy1(i) or (not(sx1(i)) and sb1_1(i));
 		
+		-- Stage 3 :
+		ab(i*2) 	<= b(i);
+		ab(i*2+1)	<= a(i);
+		xy(i*2)		<= y(i);
+		xy(i*2+1)	<= x(i);
+		
 		
 	end generate signalization;
 	
@@ -60,8 +68,7 @@ architecture rtl of sqrt is
 	
 	
 	stages: process (rst,clk,ena,sx0,sx1,localenc2)
-		variable localenc0 : integer range 0 to WP-1;
-			
+		variable localenc0	: integer range 0 to WP-1;
 	begin
 	
 		-- Highest signifcant pair enconder : look for the bit pair with the most significant bit.
@@ -97,6 +104,9 @@ architecture rtl of sqrt is
 			y<=(others => '0');
 			a<=(others => '0');
 			b<=(others => '0');
+			
+			--Stage 4
+			root <= (others=>'0');
 			
 			
 					
@@ -137,11 +147,21 @@ architecture rtl of sqrt is
 			decoder<=localenc2;
 			sho<=sa2(localenc2);
 			
-			stage34
-			
+			-- stage34
+			for i in 0 to WP-1 loop 
+				if i>decoder then
+					root(i)<='0';
+				elsif decoder-i>2 then
+					root(i)<=ab(decoder+i+1);
+				elsif decoder-i=2 then
+					root(i)<=(ab(decoder+i+1) and not(sho)) or (xy(decoder+i+1) and sho);
+				else
+					root(i)<=xy(decoder+i+1);
+				end if;
+			end loop;
+						
 		end if;
-	
-	
+
 	end process stages;
 	
 	

@@ -32,15 +32,15 @@ use ieee.std_logic_1164.all;
 package powerGrid is
 
 	-- R2 for size and width
-	type SIZE_WIDTH is array (0 to 1) of integer;
-	type DUPLA is array (0 to 2) of SIZE_WIDTH; 
+	type SIZE_WIDTH is array (integer,integer) of integer;
+	type DUPLA is array (0 to 2,1 downto 0) of integer; 
 	
 	-- Tuple for widths
 	type WARRAY is array (0 to 2) of integer;
 	
 	-- Index 
-	constant SZINDEX: integer :=0;
-	constant WDINDEX: integer :=1;
+	constant SZINDEX: integer :=0;	-- Size Description Index.
+	constant WDINDEX: integer :=1;	-- Width description Index.
 	
 	-- Register file for spheres.
 	-- OP1 : One sphere output per clock.
@@ -53,10 +53,11 @@ package powerGrid is
 	constant SZALFA		: integer := 1;
 	constant SZBETA		: integer := 2;
 	
+	constant DBUSW		: integer := 64;
 	constant BUSW		: integer := 32;
 	constant HBUSW		: integer := 18;
 	
-	-- Size and Width.
+	-- Size and Width depending upon the number of spheres to push out in one clock (OP1= One sphere, OP2 = Two spheres, OP4= Four spheres).
 	constant REGSZADD	: WARRAY := (12,11,10);
 	constant CIDSZADD	: DUPLA := ((1,0),(2,1),(4,2));
 	
@@ -300,15 +301,16 @@ package powerGrid is
 		generic (
 		
 			OPMODE	: integer := OP4; 		-- By default push out 4 spheres at same time.
-			SZMODE	: integer := SZBETA;	-- By default the max sphere numbers is 2048, but could be 4096 with SZALFA.
-		
+			SZMODE	: integer := SZBETA		-- By default the max sphere numbers is 2048, but could be 4096 with SZALFA.
+			
+			
 		);
 		port (
 			
 			
 			clk, ena: in std_logic; -- The usual control signals.
 			
-			wen		: in std_logic_vector	(CIDSZADD(OPMODE(SZINDEX))*4-1 downto 0);	-- Write enable signals
+			wen		: in std_logic_vector	(CIDSZADD(OP4,SZINDEX)-1 downto 0);	-- Write enable signals
 			add		: in std_logic_vector	(REGSZADD(OPMODE)-SZMODE  downto 0);		-- Address bus
 			
 			datain	: in std_logic_vector	(BUSW-1 downto 0);	-- incoming data from 32 bits width bus.
@@ -320,7 +322,7 @@ package powerGrid is
 			
 		);
 	
-	end entity;	
+	end component;	
 	
 	-- A scan flip flop, aka selectable input ff.
 	component scanFF 
