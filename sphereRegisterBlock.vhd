@@ -3,12 +3,12 @@
 
 library ieee;
 use ieee.std_logic_1164.all;
-
+use work.powerGrid.all;
 
 entity sphereRegisterBlock is
 	generic (
 		OPMODE	: integer := OP4; 		-- By default push out 4 spheres at same time.
-		SZMODE	: integer := SZBETA;	-- By default the max sphere numbers is 2048, but could be .
+		SZMODE	: integer := SZBETA		-- By default the max sphere numbers is 2048, but could be .
 	);
 	port (
 		-- The usual control signals.
