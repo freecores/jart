@@ -23,7 +23,7 @@
 	
 -- Zu synthesises the z and x components of the unitary vectors along an image vertical and/or horizontal line respectively. 
 -- For the jart project Zu must be used with the following values:
--- When synthesising X , VALSTART must be 34, when synthesising Z, VALSTART must be 4. 	
+-- When synthesising X , VALSTART must be 34, when synthesising Z, VALSTART must be 9. 	
 
 
 library ieee;	
@@ -34,7 +34,7 @@ use ieee.std_logic_signed.all;
 entity zu is 
 	generic
 	(
-		VALSTART		: integer := 15
+		VALSTART		: integer := 9
 	);
 	port (
 	
