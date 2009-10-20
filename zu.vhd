@@ -34,14 +34,15 @@ use ieee.std_logic_signed.all;
 entity zu is 
 	generic
 	(
-		VALSTART		: integer := 9
+		VALSTART		: integer := 9 
+		TOP				: integer := 1024;
 	);
 	port (
 	
 		clk, rst, ena 	: in std_logic; -- The usual control signals
 		clr				: in std_logic;
-		zpos			: out integer range -1024 to 1023;
-		zneg			: out integer range -1024 to 1023	
+		zpos			: out integer range -TOP to TOP-1;
+		zneg			: out integer range -TOP to TOP-1;	
 	);
 
 end entity;
