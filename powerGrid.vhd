@@ -61,7 +61,35 @@ package powerGrid is
 	constant REGSZADD	: WARRAY := (12,11,10);
 	constant CIDSZADD	: DUPLA := ((1,0),(2,1),(4,2));
 	
-	
+	-- Unitary Ray Set. 
+	-- Y component generation.
+	component yu  
+		generic (
+		
+		TOP : integer := 1024;		-- Define the max counting number.. the number must be expressed as 2 power, cause the range of counting is going to be defined as top-1 downto top/2.
+		-- However this is going to be by now, cause in the future the ray generation will GO on for higher resolution images , and perhaps it would be required a more extended range for the yu component.
+		SCREENW : integer := 320
+		);
+		port (
+		clk,rst,ena		: in std_logic;
+		lineDone		: out std_logic;
+		ypos			: out integer range TOP/2 to TOP-1
+		);
+	end component;
+	-- Z and X component generation
+	component zu  
+		generic
+		(
+		VALSTART		: integer := 9
+		);
+		port (
+ 
+		clk,rst,ena 	: in std_logic; -- The usual control signals
+		clr				: in std_logic;
+		zpos			: out integer range -1024 to 1023;
+		zneg			: out integer range -1024 to 1023	
+		);
+ 	end component;
 
 	
 	-- Register blocks.....
@@ -744,4 +772,25 @@ package powerGrid is
 		inter 	: out std_logic_vector (D-1 downto 0)
 		);
 	end component;
+	
+	function mylog2( x : in integer; s: string) return integer;
+	
 end powerGrid;
+package body powerGrid is 
+	function mylog2(x: integer; s : string) return integer is
+		variable accum : integer :=1;
+		variable i	   : integer range 0 to 32 := 1;
+	begin
+		
+		while (accum<=x) loop
+			accum	:= accum*2;
+			i		:= i+1;
+		end loop;
+		if s="unsigned" then
+			return i-1;
+		else
+			return i;
+		end if;
+	end;
+
+end package body;

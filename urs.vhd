@@ -116,13 +116,21 @@ begin
 			slockq 		<='0';	
 			urs			<='0';						
 			linecounter := 0;
-			gridindex	:= 0;
+			gridindex	:= 1;
 			
 		elsif rising_edge(clk) and ena='1' then
 			y <= sypos;
 			-- Calculate the locked 
 			if slockq = '1' then -- If we already load the initial ypos value, then we must be unlocked!
-				if slockd = '1' then
+				for i in 0 to GRIDS-1 loop
+					if gridindex=i then
+						grid_enable(i)<='1';
+					else
+						grid_enable(i)<='0';
+					end if;
+				end loop;
+				gridindex:=gridindex+1;
+				if slockd = '1' then -- This is the end....  of the line....... my friend... This is the end...... 
 					if linecounter = (SCREENW/2)-1 then
 						urs <= '1'; -- Finished the URS.
 					else
@@ -137,16 +145,7 @@ begin
 			
 			end if;
 					
-			-- Calculate the enable. (One Hot Deco)
-			for i in 0 to GRIDS-1 loop	
-				if i = gridindex then
-					grid_enable(i)<='1';
-				else
-					grid_enable(i)<='0';
-				end if;
-			end loop;
-			gridindex:=gridindex+1;
-		
+			
 		end if;
 	
 	end process;			

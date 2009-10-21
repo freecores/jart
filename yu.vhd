@@ -34,10 +34,10 @@ entity yu is
 	generic (
 		TOP : integer := 1024;								-- Define the max counting number.. the number must be expressed as 2 power, cause the range of counting is going to be defined as TOP-1 downto TOP/2.
 															-- However this is going to be by now, cause in the future the ray generation will GO on for higher resolution images , and perhaps it would be required a more extended range for the yu component.
-		SCREENW : integer range 0 to 1023 := 320 			--  resolution width is 320 
+		SCREENW : integer := 320 			--  resolution width is 320 
 	);
 	port (
-		clk,ena,rst		: in std_logic;
+		clk,rst,ena		: in std_logic;
 		lineDone		: out std_logic; 					-- Finished image row. once a hundred and sixty times....
 		ypos			: out integer range TOP/2 to TOP-1
 --		ocntr			: out integer range 0 to SCREENW/2 
@@ -128,9 +128,8 @@ begin
 			if cc = 0 then
 				ypos <= f1;
 				f0 := f1;
-				lineDone <='1';
+				
 			else 
-				lineDone <='0';
 				ypos <= f0;
 				if sf0(0)='1' then
 					f0 := f0 - 1;
@@ -139,12 +138,13 @@ begin
 			
 			-- Count when reach linefeed +3 (159) then turn cc into 0, else turn it into cc+1!
 			if cc=linefeed+3 then
-			
+				lineDone <='1';
 				if sf1(0) = '1' then 
 					f1 := f1 - 1;
 				end if;
 				cc:=0;
 			else 
+				lineDone <='0';
 				cc:=cc+1;
 			end if;
 		

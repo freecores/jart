@@ -34,26 +34,26 @@ use ieee.std_logic_signed.all;
 entity zu is 
 	generic
 	(
-		VALSTART		: integer := 9 
-		TOP				: integer := 1024;
+		VALSTART		: integer := 4; 
+		TOP				: integer := 1024
 	);
 	port (
 	
 		clk, rst, ena 	: in std_logic; -- The usual control signals
 		clr				: in std_logic;
 		zpos			: out integer range -TOP to TOP-1;
-		zneg			: out integer range -TOP to TOP-1;	
+		zneg			: out integer range -TOP to TOP-1
 	);
 
 end entity;
 
 architecture rtl of zu is
-	
+	signal pivot : std_logic;
 begin
 
 	process (clk,rst,ena,clr)
-		variable pivot	: integer range 0 to 31;
-		variable z 	: integer range  -1024 to 1023;
+		
+		variable z 	: integer range  -TOP to TOP-1;
 	begin
 		
 		if rst='0' then
@@ -61,19 +61,19 @@ begin
 			zpos<=VALSTART;
 			zneg<=-VALSTART;
 			z:=VALSTART;
-			pivot:=0;
+			pivot<='0';
 		
 		elsif rising_edge(clk) and ena='1' then
 				
 			if clr='1' then
 				z:=VALSTART;
-				pivot:=0;
-			elsif pivot = 0 then 
+				pivot<='0';
+			elsif pivot = '0' then 
 				z:=z+3;
-				pivot:=1;
+				pivot <= '1';
 			else 
 				z:=z+2;
-				pivot:=0;
+				pivot <= '0';
 			end if;
 			
 			zpos <= z;
