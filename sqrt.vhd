@@ -1,9 +1,9 @@
--- Authors :  
+-- Author:  
 -- ***************************************************************************************************
---                     Juan Carlos Giraldo Carvajal M.Sc. : came up some morning with this idea.......
+--                     Juan Carlos Giraldo Carvajal M.Sc.
 -- ***************************************************************************************************
 --
---		Julian Andres Guarin Reyes : An easier one : encoded Juan's Idea in this RTL.
+--		
 --
 --
 
@@ -32,7 +32,7 @@
     -- along with JART (Just Another Ray Tracer).  If not, see <http://www.gnu.org/licenses/>.
 	
 -- A 1 clock x 4 stage pipe square root.
--- The RTL encoding work was done by Julian Andres Guarin Reyes, however the real deal, was Juan Carlos Giraldo Carvajal, who came up with the idea.......
+
 
 library ieee;
 use ieee.std_logic_1164.all;
