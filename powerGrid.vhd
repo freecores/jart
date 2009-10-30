@@ -61,13 +61,39 @@ package powerGrid is
 	constant REGSZADD	: WARRAY := (12,11,10);
 	constant CIDSZADD	: DUPLA := ((1,0),(2,1),(4,2));
 	
+	
+	-- Decimal Fix is a component used after normalization (unitary vector calculation), when you want to assure that your A(n,10) number is representing a (-1,1) number. For that matter and  precission issues, your unitary vector component may go beyond bounds, lower than -1 or greater than 1. After executing a square root or a division, where the result must be between -1 and 1, you can have little misscalculation, for example 1.0004+ or -1.0004-. There's no way to know how much the error is, but for sure we can minimize it. We can push up a 1.0004- to -1, and pull down a 1.0004+ to 0.999023.
+
+    
+	component decimalFix  
+	generic
+	(
+		bigdecimal		: integer := 16; 
+		litdecimal		: integer := 10;
+		litinteger		: integer := 7
+		
+	);
+	port (
+	
+		clk, rst, ena 	: in std_logic; -- The usual control signals
+		inputsign,ovf	: in std_logic; -- Sign bit and overflow bit, the overflow bit is usually the less significant one in the integer bit set.
+		outputsign		: out std_logic; -- Sign at output.
+		inputdecimal	: in std_logic_vector (bigdecimal-1 downto 0); -- The 16 bit decimal (by default) decimal entering
+		outputdecimal	: out std_logic_vector (litdecimal-1 downto 0) -- The 10 bit decimal at output.
+		
+		
+		
+	);
+
+	end component;
 	-- Unitary Ray Set. 
 	-- Y component generation.
 	component yu  
 		generic (
 		
-		TOP : integer := 1024;		-- Define the max counting number.. the number must be expressed as 2 power, cause the range of counting is going to be defined as top-1 downto top/2.
+		-- Define the max counting number.. the number must be expressed as 2 power, cause the range of counting is going to be defined as top-1 downto top/2.
 		-- However this is going to be by now, cause in the future the ray generation will GO on for higher resolution images , and perhaps it would be required a more extended range for the yu component.
+		TOP : integer := 1024;		
 		SCREENW : integer := 320
 		);
 		port (
