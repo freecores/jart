@@ -61,7 +61,7 @@ architecture rtl of yu is
 	end component;
 
 	
-	constant linefeed : integer range 0 to (SCREENW/2) := (SCREENW/2)-4;
+	constant linefeed : integer range 0 to (SCREENW/2) := (SCREENW/2)-2;
 	
 	
 	-- Support signals.
@@ -69,10 +69,13 @@ architecture rtl of yu is
 	signal s1addf1	: std_logic_vector (13 downto 0);	-- The function 1 is the function of the y component integration curve initial constant.
 	signal sf0		: std_logic_vector (0 downto 0);	-- Derivative function
 	signal sf1		: std_logic_vector (0 downto 0);	-- Derivative curve, initial constant derivative function.
+	signal cc		: integer range 0 to SCREENW/2;	
+	signal f0 : integer range TOP/2 to TOP-1;
 	
-	-- Some Initial Locks.
-	signal sneglock	: std_logic;
 begin
+
+	-- Connect f0, to the output.
+	ypos <= f0;
 
 	derivate : yurom 
 	port map (
@@ -83,76 +86,82 @@ begin
 		q_b			=> sf1
 	);
 
-	integrate : process(clk,rst,ena)
 	
-		variable f0 : integer range TOP/2 to TOP-1;
+	integrationControl : process (clk,rst,ena)
 		variable f1 : integer range TOP/2 to TOP-1;
-		variable cc	: integer range 0 to SCREENW/2;	
+	begin
 	
-	begin 
-		
 		if rst='0' then
-			
-			f0:=TOP-10;
+
+			f0<=TOP-1;
 			f1:=TOP-1;
-			cc:=linefeed;
-				
-			-- Right from the start.
-			s1addf0	(13 downto 1) <= (others=>'0');		-- 0000.
-			s1addf0 (0) <= '1';
-			s1addf1	<= "11111010000000";	-- 3E7F.	
+			lineDone<='0';
 			
-			-- Locks
-			sneglock<='0';
+		elsif rising_edge(clk) and ena='1' then
+		
+			if cc=0 then
+				lineDone<='1';
+				if sf1(0) ='1' then
+					f1 := f1 - 1;
+				end if;
+				f0 <= f1;
 			
+			else
+				lineDone<='0';
+				if sf0(0) = '1' then
+					f0 <= f0-1;
+				end if;
 			
-		elsif rising_edge(clk) and ena='1' then --ADD!
-			
-			
-			-- Count f0 address
-			if sneglock='1' then
-				s1addf0 <= s1addf0+1;
 			end if;
 			
-			-- Count f1 address (156)
+			
+			
+		end if;
+		
+	
+	end process;
+	
+	counterControl : process (clk,rst,ena)
+	begin
+	
+		if rst='0' then
+		
+			cc<=0;
+		
+		elsif rising_edge(clk) and ena='1' then 
+			if cc=(SCREENW/2)-1 then
+				cc<=0;
+			else
+				cc<=cc+1;
+			end if;
+		end if;
+		
+	end process;
+		
+	addressControl : process (clk,rst,ena)
+	begin
+		if rst='0' then 
+			-- Right from the start.
+			s1addf0	(13 downto 1) <= (others=>'0');		-- 00001.
+			s1addf0 (0) <= '1';
+			s1addf1	<= "11111010000000";	-- 3E80.	
+		
+		elsif rising_edge(clk) and ena='1' then
+
+			s1addf0 <= s1addf0+1;
+			-- Count f1 address (158)
 			if cc=linefeed then
 				s1addf1 <= s1addf1+1;
 			end if;
 			
-			-- Unlock first stage f0 address (157)
-			if cc=linefeed+1 then
-				sneglock<='1';
-			end if;
-			
-			-- Now, the integration function, cause we are at a new line..
-			if cc = 0 then
-				ypos <= f1;
-				f0 := f1;
-				
-			else 
-				ypos <= f0;
-				if sf0(0)='1' then
-					f0 := f0 - 1;
-				end if;
-			end if;	
-			
-			-- Count when reach linefeed +3 (159) then turn cc into 0, else turn it into cc+1!
-			if cc=linefeed+3 then
-				lineDone <='1';
-				if sf1(0) = '1' then 
-					f1 := f1 - 1;
-				end if;
-				cc:=0;
-			else 
-				lineDone <='0';
-				cc:=cc+1;
-			end if;
-		
 		end if;
-		
+	
 	end process;
 	
-		
+	
+	
+	
+	
 
 end rtl;
 	
